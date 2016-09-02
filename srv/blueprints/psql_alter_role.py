@@ -233,7 +233,7 @@ for line in output.split(linesep):
 # Report Output
 if exitcode == 0:
     # We good
-    print("jojo_return_value execution_status=ok")
+    print("return_value execution_status=ok")
 else:
     # Errors should flag an API error code.
     error_hint = []
@@ -249,8 +249,8 @@ else:
         error_hint = ['UNKNOWN']
     if error_scenario_3:
         error_hint.append('ROLE_DOES_NOT_EXIST')
-    print("jojo_return_value execution_status=rollback")
-    print("jojo_return_value error_reason_indicator={error}".format(
+    print("return_value execution_status=rollback")
+    print("return_value error_reason_indicator={error}".format(
         error=error_hint))
 
 toolkit.exit(exitcode)

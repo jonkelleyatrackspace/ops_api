@@ -162,17 +162,17 @@ class ScriptDetailsHandler(BaseHandler):
         if script.output == 'combined':
             retcode, stdout = yield gen.Task(script.execute, self.params)
             self.finish({
-                "stdout": stdout,
-                "return_values": self.find_return_values(stdout),
-                "retcode": retcode
+                "out": self.filter_return_values(stdout),
+                "values": self.find_return_values(stdout),
+                "status": retcode
             })
         else:
             retcode, stdout, stderr = yield gen.Task(script.execute, self.params)
             self.finish({
-                "stdout": stdout,
-                "stderr": stderr,
-                "return_values": self.find_return_values(stdout),
-                "retcode": retcode
+                "out": self.filter_return_values(stdout),
+                "err": self.filter_return_values(stderr),
+                "values": self.find_return_values(stdout),
+                "status": retcode
             })
         
     @asynchronous
@@ -188,24 +188,24 @@ class ScriptDetailsHandler(BaseHandler):
         if script.output == 'combined':
             retcode, stdout = yield gen.Task(script.execute, self.params)
             self.finish({
-                "stdout": stdout,
-                "return_values": self.find_return_values(stdout),
-                "retcode": retcode
+                "out": self.filter_return_values(stdout),
+                "values": self.find_return_values(stdout),
+                "status": retcode
             })
         else:
             retcode, stdout, stderr = yield gen.Task(script.execute, self.params)
             self.finish({
-                "stdout": stdout,
-                "stderr": stderr,
-                "return_values": self.find_return_values(stdout),
-                "retcode": retcode
+                "out": self.filter_return_values(stdout),
+                "err": self.filter_return_values(stderr),
+                "values": self.find_return_values(stdout),
+                "status": retcode
             })
         
     @asynchronous
     @gen.engine
     def put(self, script_name):
         """ run the script """
-                
+
         if config['force_json']:
             self.set_header("Content-Type", "application/json; charset=UTF-8")
 
@@ -214,17 +214,17 @@ class ScriptDetailsHandler(BaseHandler):
         if script.output == 'combined':
             retcode, stdout = yield gen.Task(script.execute, self.params)
             self.finish({
-                "stdout": stdout,
-                "return_values": self.find_return_values(stdout),
-                "retcode": retcode,
+                "out": self.filter_return_values(stdout),
+                "values": self.find_return_values(stdout),
+                "status": retcode,
             })
         else:
             retcode, stdout, stderr = yield gen.Task(script.execute, self.params)
             self.finish({
-                "stdout": stdout,
-                "stderr": stderr,
-                "return_values": self.find_return_values(stdout),
-                "retcode": retcode
+                "out": self.filter_return_values(stdout),
+                "err": self.filter_return_values(stderr),
+                "values": self.find_return_values(stdout),
+                "status": retcode
             })
         
     @asynchronous
@@ -240,17 +240,17 @@ class ScriptDetailsHandler(BaseHandler):
         if script.output == 'combined':
             retcode, stdout = yield gen.Task(script.execute, self.params)
             self.finish({
-                "stdout": stdout,
-                "return_values": self.find_return_values(stdout),
-                "retcode": retcode
+                "out": self.filter_return_values(stdout),
+                "values": self.find_return_values(stdout),
+                "status": retcode
             })
         else:
             retcode, stdout, stderr = yield gen.Task(script.execute, self.params)
             self.finish({
-                "stdout": stdout,
-                "stderr": stderr,
-                "return_values": self.find_return_values(stdout),
-                "retcode": retcode
+                "out": self.filter_return_values(stdout),
+                "err": self.filter_return_values(stderr),
+                "values": self.find_return_values(stdout),
+                "status": retcode
             })
         
     def get_script(self, script_name, http_method):
@@ -272,13 +272,24 @@ class ScriptDetailsHandler(BaseHandler):
 
         return_values = {}
         for line in output:
-            if line.startswith('jojo_return_value'):
-                temp = line.replace("jojo_return_value","").strip()
+            if line.startswith('return_value'):
+                temp = line.replace("return_value","").strip()
                 key, value = [item.strip() for item in temp.split('=')]
                 return_values[key] = value
 
         return return_values
 
+    def filter_return_values(self, output):
+        """ do not return the return values in the stdout
+            or stderr as we're displaying that with
+            self.find_return_values()
+        """
+        lines = []
+        for line in output:
+            if not line.startswith('return_value'):
+                lines.append(line)
+
+        return lines
 
 @route(r"/reload/?")
 class ReloadHandler(BaseHandler):

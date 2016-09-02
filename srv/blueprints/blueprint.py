@@ -192,8 +192,8 @@ class ToolKit():
         It's a security bailout
         """
         if len(string) > maxlength:
-            print("jojo_return_value execution_status=rollback")
-            print("jojo_return_value error_reason_indicator=UNKNOWN")
+            print("return_value execution_status=rollback")
+            print("return_value error_reason_indicator=UNKNOWN")
             exit(1)
 
     def harden_permissions(self, fname):
@@ -270,7 +270,7 @@ class Sanitize():
             #  This user may be fuzzing the API so 
             #   quietly exit stage right
             #    -->
-            print("jojo_return_value execution_status=500")
+            print("return_value execution_status=500")
             self.err.print_stderr("An internal error has occurred.")
             exit(254)
         else:
@@ -300,7 +300,7 @@ class Sanitize():
             errmessage = "Patterns are not allowed in parameters"
 
         if fail > 0:
-            print("jojo_return_value execution_status=500")
+            print("return_value execution_status=500")
             self.err.print_stderr(errmessage)
             exit(fail)
 
@@ -413,7 +413,7 @@ class ParamHandle():
         Causes an error message then exits, used when a parameter is nil.
         """
         if self.is_nil(value):
-            print("jojo_return_value error_reason_indicator=UNDEFINED_INPUT_ERROR")
+            print("return_value error_reason_indicator=UNDEFINED_INPUT_ERROR")
             self.err.print_stderr(
                 "Parameter `{name}` provided with value: <NULL> which cannot be undefined".format(name=keyname))
             exit(500)
@@ -422,7 +422,7 @@ class ParamHandle():
         """
         Causes an error message then exits, used when a parameter is invalid.
         """
-        print("jojo_return_value error_reason_indicator={indicator}".format(indicator=error_reason_indi))
+        print("return_value error_reason_indicator={indicator}".format(indicator=error_reason_indi))
         self.err.print_stderr("Parameter `{key}` provided with value: {param}, expected: {expect} value.".format(
             key=keyname, expect=expected_msg, param=value))
         exit(500)

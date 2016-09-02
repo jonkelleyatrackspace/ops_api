@@ -73,11 +73,11 @@ if exitcode > 0:
 # Report Output
 if exitcode == 0:
     # We good
-    print("jojo_return_value server_type={server_class}".format(
+    print("return_value server_type={server_class}".format(
         server_class=server_class))
-    print("jojo_return_value pg_is_in_recovery={status}".format(
+    print("return_value pg_is_in_recovery={status}".format(
         status=pg_is_in_recovery))
-    print("jojo_return_value execution_status=ok")
+    print("return_value execution_status=ok")
 else:
     # Errors should flag an API error code.
     error_hint = []
@@ -91,12 +91,12 @@ else:
         error_hint.append('CANNOT_DETERMINE_REPLICATION_STATUS')
     if len(error_hint) == 0:
         error_hint = ['UNKNOWN']
-    print("jojo_return_value server_type={server_class}".format(
+    print("return_value server_type={server_class}".format(
         server_class=server_class))
-    print("jojo_return_value pg_is_in_recovery={status}".format(
+    print("return_value pg_is_in_recovery={status}".format(
         status=pg_is_in_recovery))
-    print("jojo_return_value execution_status=rollback")
-    print("jojo_return_value error_reason_indicator={error}".format(
+    print("return_value execution_status=rollback")
+    print("return_value error_reason_indicator={error}".format(
         error=error_hint))
 
 toolkit.exit(exitcode)

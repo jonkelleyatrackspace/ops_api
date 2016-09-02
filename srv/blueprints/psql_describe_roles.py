@@ -29,6 +29,6 @@ sql_code = toolkit.write_temp(sql)
 # ****************
 output = run.sql(sql_code)
 print(output)
-print("jojo_return_value execution_status=ok")
+print("return_value execution_status=ok")
 
 toolkit.exit(0)

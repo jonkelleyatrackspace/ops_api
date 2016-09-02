@@ -408,5 +408,5 @@ output = run.ansible(sanitized_arguement)
 # *  RESULTS  *
 # *************
 print(output)
-print("jojo_return_value ansible_options={opt}".format(opt=ansible_opts))
+print("return_value ansible_options={opt}".format(opt=ansible_opts))
 exit(0)

@@ -59,6 +59,6 @@ output = run.ansible(ansible_opts)
 # *************
 # *  RESULTS  *
 # *************
-print("jojo_return_value ansible_options={opt}".format(opt=ansible_opts))
+print("return_value ansible_options={opt}".format(opt=ansible_opts))
 print(output)
 exit(0)

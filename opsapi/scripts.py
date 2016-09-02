@@ -309,7 +309,7 @@ def create_script(script_name, filename):
         if in_block and key == "lock":
             lock = (value == "True")
             continue
-        
+
         log.warn("unrecognized line in jojo block: {0}".format(line))
     
     # if in_bock is true, then we never got an end to the block, which is bad
