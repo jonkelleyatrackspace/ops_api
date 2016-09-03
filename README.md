@@ -6,11 +6,19 @@ Use the apache htpasswd utility to create your htpasswd files.
 
 ## Quick dev environment
 
-Start up opsapi and hit it with curl:
+You will need to `pip install paver` first.
 
-    opsapi -d --dir /srv/pyjojo
-    curl -XPOST http://localhost:3000/scripts/echo -H "Content-Type: application/json" -d '{"text": "hello world!"}'
+Install the cloned opsapi source with paver:
 
+    paver setup
+
+Start a local dev server:
+
+    paver start
+
+Start a local dev server:
+
+    paver start
 
 ## Tutorial
 

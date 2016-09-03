@@ -86,6 +86,12 @@ def start():
     sudo_warning()
     sh('opsapi --dir=/srv/pyjojo')
 
+@task
+def make_rpm():
+    """
+    Builds RPM from the local .spec file.
+    """
+    print("TODO")
 
 @task
 def clean(options):
