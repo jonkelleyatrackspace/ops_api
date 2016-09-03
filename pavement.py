@@ -62,7 +62,9 @@ def load_extensions(options):
     """
     sudo_warning()
     if os.path.isdir("/srv/pyjojo"):
+        print("Deleting /srv/pyjojo")
         shutil.rmtree("/srv/pyjojo")
+    print("Installing extensions to /srv/pyjojo")
     shutil.copytree("./srv/blueprints", ("/srv/pyjojo"))
     chmod_dash_r("/srv/pyjojo", 0755)
 
