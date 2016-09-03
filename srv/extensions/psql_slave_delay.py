@@ -19,7 +19,7 @@
 # -- config --
 
 from os import linesep
-from blueprint import CmdRun, ToolKit
+from extension import CmdRun, ToolKit
 import re
 
 # Spawn Instances

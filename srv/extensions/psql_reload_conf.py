@@ -19,7 +19,7 @@
 # -- config --
 
 from os import linesep
-from blueprint import CmdRun, ToolKit
+from extension import CmdRun, ToolKit
 
 # Spawn Instances
 run = CmdRun()        # <class> Run

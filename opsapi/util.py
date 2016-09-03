@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # file: util.py
-# authors: anthony tarola
+# authors: jonathan kelley, anthony tarola
 # ---
 # license: the mit license
 # Permission is hereby granted, free of charge, to any person obtaining a copy of

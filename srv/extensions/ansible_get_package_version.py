@@ -18,8 +18,8 @@
 # lock: False
 # -- config --
 
-from blueprint import CmdRun, Constants
-from blueprint import ParamHandle as Param
+from extension import CmdRun, Constants
+from extension import ParamHandle as Param
 from json import dumps as decode
 
 # Spawn Instances

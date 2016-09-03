@@ -20,9 +20,9 @@
 # -- config --
 
 from os import linesep
-from blueprint import Sanitize, CmdRun
-from blueprint import ToolKit, Constants
-from blueprint import ParamHandle as Param
+from extension import Sanitize, CmdRun
+from extension import ToolKit, Constants
+from extension import ParamHandle as Param
 
 # Spawn Instances
 p = Param()                       # <class> Parameter manipulation

@@ -144,13 +144,14 @@ class Constants():
     """
     CLASS: Fixed properties that rarely change
     """
+    LINUX_MAX_FILE_NAME_LENGTH = 255
+    LINUX_MAX_FILE_PATH_LENGTH = 4096
+
     # Postgres uses  no more than  NAMEDATALEN-1 bytes
     # of an  identifier;  longer names can be written in
     # commands, but they will be truncated.  By default,
     # NAMEDATALEN is 64 so the maximum identifier length
     # is 63 bytes.
-    LINUX_MAX_FILE_NAME_LENGTH = 255
-    LINUX_MAX_FILE_PATH_LENGTH = 4096
     POSTGRES_NAMEDATA_LEN = 64
 
     # User selectable socket limits can go this high

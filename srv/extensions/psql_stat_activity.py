@@ -18,7 +18,7 @@
 # tags: Postgres, PGaaS, cit-ops
 # -- config --
 
-from blueprint import ToolKit, CmdRun
+from extension import ToolKit, CmdRun
 
 # Spawn Instances
 toolkit = ToolKit()

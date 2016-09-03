@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # file: handlers.py
-# authors: anthony tarola
+# authors: jonathan kelley, anthony tarola
 # ---
 # license: the mit license
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -110,13 +110,15 @@ class BaseHandler(RequestHandler):
             message = ''
 
         self.write({
-            'error': {
-                'code': status_code,
+            'debug': {
+                'err': message
+            },
+            'job': {
+                'status': status_code,
                 'type': httplib.responses[status_code],
-                'message': message
+                'results': {}
             }
         })
-
 
 @route(r"/extension_names/?")
 class ExtensionNamesCollectionHandler(BaseHandler):
@@ -176,20 +178,29 @@ class ExtensionDetailsHandler(BaseHandler):
 
         if extension.output == 'combined':
             retcode, stdout = yield gen.Task(extension.execute, self.params)
+            return_vals = self.find_return_values(stdout)
+            return_stat = {"return": retcode}
+            job_results = return_stat.copy()
+            job_results.update(return_vals)
             self.finish({
-                "out": self.filter_return_values(stdout),
-                "values": self.find_return_values(stdout),
-                "status": retcode
+                "debug": {
+                    "out": self.filter_return_values(stdout)
+                },
+                "job": job_results
             })
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
+            return_vals = self.find_return_values(stdout)
+            return_stat = {"return": retcode}
+            job_results = return_stat.copy()
+            job_results.update(return_vals)
             self.finish({
-                "out": self.filter_return_values(stdout),
-                "err": self.filter_return_values(stderr),
-                "values": self.find_return_values(stdout),
-                "status": retcode
+                "debug": {
+                    "out": self.filter_return_values(stdout),
+                    "err": self.filter_return_values(stderr)
+                },
+                "job": job_results
             })
-
     @asynchronous
     @gen.engine
     def delete(self, extension_name):
@@ -202,20 +213,29 @@ class ExtensionDetailsHandler(BaseHandler):
 
         if extension.output == 'combined':
             retcode, stdout = yield gen.Task(extension.execute, self.params)
+            return_vals = self.find_return_values(stdout)
+            return_stat = {"return": retcode}
+            job_results = return_stat.copy()
+            job_results.update(return_vals)
             self.finish({
-                "out": self.filter_return_values(stdout),
-                "values": self.find_return_values(stdout),
-                "status": retcode
+                "debug": {
+                    "out": self.filter_return_values(stdout)
+                },
+                "job": job_results
             })
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
+            return_vals = self.find_return_values(stdout)
+            return_stat = {"return": retcode}
+            job_results = return_stat.copy()
+            job_results.update(return_vals)
             self.finish({
-                "out": self.filter_return_values(stdout),
-                "err": self.filter_return_values(stderr),
-                "values": self.find_return_values(stdout),
-                "status": retcode
+                "debug": {
+                    "out": self.filter_return_values(stdout),
+                    "err": self.filter_return_values(stderr)
+                },
+                "job": job_results
             })
-
     @asynchronous
     @gen.engine
     def put(self, extension_name):
@@ -228,18 +248,28 @@ class ExtensionDetailsHandler(BaseHandler):
 
         if extension.output == 'combined':
             retcode, stdout = yield gen.Task(extension.execute, self.params)
+            return_vals = self.find_return_values(stdout)
+            return_stat = {"return": retcode}
+            job_results = return_stat.copy()
+            job_results.update(return_vals)
             self.finish({
-                "out": self.filter_return_values(stdout),
-                "values": self.find_return_values(stdout),
-                "status": retcode,
+                "debug": {
+                    "out": self.filter_return_values(stdout)
+                },
+                "job": job_results
             })
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
+            return_vals = self.find_return_values(stdout)
+            return_stat = {"return": retcode}
+            job_results = return_stat.copy()
+            job_results.update(return_vals)
             self.finish({
-                "out": self.filter_return_values(stdout),
-                "err": self.filter_return_values(stderr),
-                "values": self.find_return_values(stdout),
-                "status": retcode
+                "debug": {
+                    "out": self.filter_return_values(stdout),
+                    "err": self.filter_return_values(stderr)
+                },
+                "job": job_results
             })
 
     @asynchronous
@@ -254,18 +284,28 @@ class ExtensionDetailsHandler(BaseHandler):
 
         if extension.output == 'combined':
             retcode, stdout = yield gen.Task(extension.execute, self.params)
+            return_vals = self.find_return_values(stdout)
+            return_stat = {"return": retcode}
+            job_results = return_stat.copy()
+            job_results.update(return_vals)
             self.finish({
-                "out": self.filter_return_values(stdout),
-                "values": self.find_return_values(stdout),
-                "status": retcode
+                "debug": {
+                    "out": self.filter_return_values(stdout),
+                },
+                "job": job_results
             })
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
+            return_vals = self.find_return_values(stdout)
+            return_stat = {"return": retcode}
+            job_results = return_stat.copy()
+            job_results.update(return_vals)
             self.finish({
-                "out": self.filter_return_values(stdout),
-                "err": self.filter_return_values(stderr),
-                "values": self.find_return_values(stdout),
-                "status": retcode
+                "debug": {
+                    "out": self.filter_return_values(stdout),
+                    "err": self.filter_return_values(stderr)
+                },
+                "job": job_results
             })
 
     def get_extension(self, extension_name, http_method):
@@ -285,7 +325,7 @@ class ExtensionDetailsHandler(BaseHandler):
         return extension
 
     def find_return_values(self, output):
-        """ parse output array for return values """
+        """ parse output array for return response """
 
         return_values = {}
         for line in output:
