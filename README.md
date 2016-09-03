@@ -2,7 +2,11 @@
 
 Lightweight API framework with simple extension SDK to allow rapid prototype of fairly complex infrastructure-as-a-service concepts.
 
-Use the apache htpasswd utility (from `apache2-utils` or `httpd-tools`), to create your htpasswd files.
+## How it works
+
+The opsapi framework fully manages the abstraction of REST/HTTP through Tornado. This gives you the ability to focus on your task - delivering a service API. This project was built for systems engineers and developers who need to automate orchestration of tasks on a system and can appreciate the speed and convienence of a stateless API. You can automate anything with the built in extensions for subprocess, fabric, ansible, postgres, mysql or memcache.
+
+A simple SDK is exposed to the extensions to make prototyping additional products and services a simple task. Your imagination is your prototypes limit. Just write something in [marmelab/ng-admin](https://github.com/marmelab/ng-admin) and your mom can trigger garbage collection on that Tomcat Pool! She probably shouldn't.
 
 ## Quick dev environment
 
@@ -38,7 +42,134 @@ You should see this response:
         }
     }
 
-## Usage
+## Logic Sample
+
+Depending on how you set up your param requirements in the SDK, the API has a bunch of built in filtering and input management options you can manage.
+
+Example of integer enforcement using `param.max_int` for invalid age:
+
+    curl -XPOST http://localhost:3000/extensions/test -H "Content-Type: application/json" -d '{ "name": "bob", "age": "wat}'
+
+You should see this response:
+   
+    {
+        "debug": {
+            "err": [
+                "Parameter `age` provided with value: wat, expected: PARAMETER_ERROR_IS_NOT_INTEGER value."
+        ],
+            "out": []
+        },
+        "request": {
+             "status": "422 Unprocessable Entity",
+             "troubleshoot": [
+                 "INPUT_NOT_AN_INT"
+             ]
+        }
+    }
+
+Example of parameter size limits using `param.max_length`:
+
+    curl -XPOST http://localhost:3000/extensions/test -H "Content-Type: application/json" -d '{ "name": "jon", "age": "2030"}'
+
+You should see this response:
+
+    {
+        "debug": {
+            "err": [
+                "Parameter `age` provided with value: too large, expected: input less than 3 bytes value."
+            ],
+            "out": []
+        },
+        "request": {
+            "status": "422 Unprocessable Entity",
+            "troubleshoot": [
+                "BUFFER_SIZE"
+            ]
+        }
+    }
+
+## Real-World Example
+
+Now you can start to envision a real use for the framework:
+
+    curl -XPOST http://localhost:3000/extensions/psql_drop_role -H "Content-Type: application/json" -d '{ "role": "jonkeley"}'
+
+You should see this response:
+
+    {
+        "debug": {
+            "err": [
+                "psql:/tmp/tmpVeJay3:1: ERROR:  role \"jonkelley\" does not exist",
+                "psql:/tmp/tmpVeJay3:1: ERROR:  role \"jonkelley\" does not exist",
+                "ROLLBACK"
+            ],
+            "out": [
+                "BEGIN; DROP ROLE jonkelley; END;",
+                "BEGIN",
+                "psql:/tmp/tmpVeJay3:1: ERROR:  role \"jonkelley\" does not exist",
+                "ROLLBACK",
+                ""
+            ]
+        },
+        "request": {
+            "errors": [
+                "TRANSACTION_ROLLBACK",
+                "SQL_ERROR",
+                "ROLE_DOES_NOT_EXIST"
+            ],
+            "result": "rollback",
+            "status": 1
+        }
+    }
+    
+Example fat finger a request
+
+    curl -XPOST http://localhost:3000/extensions/psql_create_role -H "Content-Type: application/json" -d '{ "role": "jonkelley"}'
+
+You should see this response:
+
+    {
+        "debug": {
+            "err": [
+                "Parameter `password` provided with value: <NULL> which cannot be undefined"
+            ],
+            "out": []
+        },
+        "request": {
+            "status": "422 unprocessable_entity",
+            "troubleshoot": [
+                "UNDEFINED_INPUT_ERROR"
+            ]
+        }
+    }
+
+Successful attempt to create the role
+
+    curl -XPOST http://localhost:3000/extensions/psql_create_role -H "Content-Type: application/json" -d '{ "role": "jonkelley", "password": "qwerty", "connection_limit": "3"}' | python -m json.tool
+
+You should see this response:
+
+    {
+        "debug": {
+            "err": [],
+            "out": [
+                "BEGIN; CREATE ROLE jonkelley WITH  CONNECTION LIMIT 3  NOCREATEUSER  NOCREATEROLE  NOCREATEDB  NOINHERIT  NOLOGIN  UNENCRYPTED  PASSWORD 'qwerty' ; END;",
+                "BEGIN",
+                "CREATE ROLE",
+                "COMMIT",
+                ""
+            ]
+        },
+        "request": {
+            "result": "ok",
+            "status": 0
+        }
+    }
+
+## Command Line Usage
+
+NOTE: You can use the apache htpasswd utility (from `apache2-utils` or `httpd-tools`), to create your htpasswd files.
+
 
     Usage: opsapi [options] <htpasswd>
 
