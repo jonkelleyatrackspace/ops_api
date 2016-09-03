@@ -11,13 +11,13 @@
 #    subject to the above copyright notice and this permission notice shall being included
 #    in all copies or substantial portions of the Software.
 
-# -- jojo --
+# -- config --
 # description: Create a new DATABASE in Postgres.
 # param: database - Your ROLE name
 # http_method: post
 # lock: False
 # tags: Postgres, CREATEROLE, Psql
-# -- jojo --
+# -- config --
 
 from os import linesep
 from blueprint import Sanitize, CmdRun

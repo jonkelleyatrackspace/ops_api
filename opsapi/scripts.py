@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # file: scripts.py
-# authors: anthony tarola
+# authors: jonathan kelley, anthony tarola
 # ---
 # license: the mit license
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -225,7 +225,7 @@ def create_script(script_name, filename):
     
     # warn the user if we can't execute this file
     if not os.access(filename, os.X_OK):
-        log.error("file with filename {0} is not executable, Ignoring.".format(filename))
+        log.error("Filename {0} not executable, file ignored".format(filename))
         return None
     
     # grab file contents
@@ -244,13 +244,13 @@ def create_script(script_name, filename):
         # we don't need the first comment, or extranious whitespace
         line = line.replace("#", "").strip()
         
-        # start of the jojo block
-        if not in_block and line.startswith("-- jojo --"):
+        # start of the extension block
+        if not in_block and line.startswith("-- config --"):
             in_block = True
             continue
         
-        # end of the jojo block, so we'll stop here
-        if in_block and line.startswith("-- jojo --"):
+        # end of the extension block, so we'll stop here
+        if in_block and line.startswith("-- config --"):
             in_block = False
             break
         
@@ -272,16 +272,13 @@ def create_script(script_name, filename):
                 http_method = value.lower()
                 continue
             else:
-                log.warn("unrecognized http_method type in jojo block: {0}".format(value.lower()))
+                log.warn("Unrecognized http_method type in -- config -- block: {0}".format(value.lower()))
                 continue
-        
-        # output
-        if in_block and key == "output":
             if value.lower() in ['split','combined']:
                 output = value.lower()
                 continue
             else:
-                log.warn("unrecognized output type in jojo block: {0}".format(value.lower()))
+                log.warn("Unrecognized output type in -- config -- block: {0}".format(value.lower()))
                 continue
         
         # param
@@ -323,14 +320,18 @@ def create_script(script_name, filename):
             continue
 
         # ignore PEP 263 Source Code Encodings
-        if line.startswith("# -*- coding: ") or line.startswith("# coding=") or line.startswith("# vim: set fileencoding="):
+        if line.startswith("-*- coding:") or line.startswith("coding=") or line.startswith("vim: set fileencoding="):
             continue
 
-        log.warn("unrecognized line in jojo block: {0}".format(line))
+        # pass for license heading or config block comment lines
+        if line.lower().startswith("license:") or line.startswith("---"):
+            continue
+
+        log.warn("Unrecognized line in -- config -- block: {0}".format(line))
     
     # if in_bock is true, then we never got an end to the block, which is bad
     if in_block:
-        log.error("file with filename {0} is missing an end block, Ignoring".format(filename))
+        log.error("File with filename {0} missing a -- config -- end block, ignoring".format(filename))
         return None
     
     return Script(filename, script_name, description, params, filtered_params, tags, http_method, output, lock)

@@ -11,12 +11,12 @@
 #    subject to the above copyright notice and this permission notice shall being included
 #    in all copies or substantial portions of the Software.
 
-# -- jojo --
+# -- config --
 # description: Show slave delay
 # http_method: get
 # lock: False
 # tags: Postgres, Psql
-# -- jojo --
+# -- config --
 
 from os import linesep
 from blueprint import CmdRun, ToolKit

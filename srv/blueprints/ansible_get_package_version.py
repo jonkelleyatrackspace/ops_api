@@ -11,12 +11,12 @@
 #    subject to the above copyright notice and this permission notice shall being included
 #    in all copies or substantial portions of the Software.
 
-# -- jojo --
+# -- config --
 # description: A proof of concept that can trigger an ansible playbook called package_version.yml to get info about a specific package version
 # param: package - The package to retrieve the information about
 # http_method: post
 # lock: False
-# -- jojo --
+# -- config --
 
 from blueprint import CmdRun, Constants
 from blueprint import ParamHandle as Param

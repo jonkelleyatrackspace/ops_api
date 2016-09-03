@@ -11,7 +11,7 @@
 #    subject to the above copyright notice and this permission notice shall being included
 #    in all copies or substantial portions of the Software.
 
-# -- jojo --
+# -- config --
 # description: A proof of concept that can trigger an ansible playbook called package_version.yml to get info about a specific package version
 # param: playbook - The path to the playbook you wish to run with ansible
 # param: ask_valt_pass - When true, ask for vault password
@@ -49,7 +49,7 @@
 # param: ask_become_pass -  When true, ask for privilege escalation password
 # http_method: post
 # lock: False
-# -- jojo --
+# -- config --
 
 from os import linesep
 from blueprint import Sanitize, CmdRun

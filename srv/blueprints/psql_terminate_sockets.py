@@ -11,7 +11,7 @@
 #    subject to the above copyright notice and this permission notice shall being included
 #    in all copies or substantial portions of the Software.
 
-# -- jojo --
+# -- config --
 # description: Will terminate sockets to a user or a database.
 # param: user - If supplied, will terminate all connections to this user.
 # param: database -  If supplied, will terminate all connections to this database.
@@ -21,7 +21,7 @@
 # http_method: post
 # lock: False
 # tags: Postgres, Psql
-# -- jojo --
+# -- config --
 
 from os import linesep
 from blueprint import Sanitize, CmdRun

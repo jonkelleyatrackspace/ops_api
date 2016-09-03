@@ -11,7 +11,7 @@
 #    subject to the above copyright notice and this permission notice shall being included
 #    in all copies or substantial portions of the Software.
 
-# -- jojo --
+# -- config --
 # description: Creates a specified database with specified role and super-role, as well as a specified super_svc and _svc account pair. Uses PostgreSQL+Database+References+and+Standards.
 # param: application - The name of your application. It will be application_role and accounts will be named after it.
 # param: super_svc_login - If the super svc has login permission
@@ -23,7 +23,7 @@
 # http_method: post
 # lock: False
 # tags: Postgres, CREATEAPPTIER, Psql
-# -- jojo --
+# -- config --
 
 from os import linesep
 from blueprint import Sanitize, CmdRun

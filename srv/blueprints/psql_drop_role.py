@@ -11,13 +11,13 @@
 #    subject to the above copyright notice and this permission notice shall being included
 #    in all copies or substantial portions of the Software.
 
-# -- jojo --
+# -- config --
 # description: Deletes a role
 # param: role - Your ROLE name
 # http_method: post
 # lock: False
 # tags: Postgres, Psql
-# -- jojo --
+# -- config --
 
 from os import linesep
 from blueprint import Sanitize, CmdRun

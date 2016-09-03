@@ -11,12 +11,12 @@
 #    subject to the above copyright notice and this permission notice shall being included
 #    in all copies or substantial portions of the Software.
 
-# -- jojo --
+# -- config --
 # description: Retrieve pg stats connection activity (whos connected)
 # http_method: get
 # lock: False
 # tags: Postgres, PGaaS, cit-ops
-# -- jojo --
+# -- config --
 
 from blueprint import ToolKit, CmdRun
 

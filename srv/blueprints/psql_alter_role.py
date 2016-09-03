@@ -11,7 +11,7 @@
 #    subject to the above copyright notice and this permission notice shall being included
 #    in all copies or substantial portions of the Software.
 
-# -- jojo --
+# -- config --
 # description: Perform ALTER on a ROLE
 # param: role - Your ROLE name
 # param: createrole - If bool set, Toggle CEATEROLE else NOCREATEROLE
@@ -26,7 +26,7 @@
 # http_method: post
 # lock: False
 # tags: Postgres, ALTERROLE, Psql
-# -- jojo --
+# -- config --
 
 from os import linesep
 from blueprint import Sanitize, CmdRun
