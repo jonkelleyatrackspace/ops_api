@@ -101,7 +101,7 @@ else:
     print("{errors}={reasons}".format(reasons=error_hint,
         errors=Constants.API_ERROR_STRING))
 
-print("{return} slave_delay={ts}".format(return=Constants.API_RETURN_STRING, ts=delay))
+print("{return} slave_delay='{ts}'".format(return=Constants.API_RETURN_STRING, ts=delay))
 print("{return} slave_delta_in_seconds={ts}".format(
     return=Constants.API_RETURN_STRING,
     ts=delay_sum_seconds))

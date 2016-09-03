@@ -18,6 +18,7 @@ import json
 import crypt
 import base64
 import difflib
+import ast
 
 from passlib.apache import HtpasswdFile
 from tornado import gen
@@ -114,10 +115,10 @@ class BaseHandler(RequestHandler):
                 'err': [httplib.responses[status_code]],
                 'out': ['']
             },
-            'job': {
+            'request': {
                 'status': status_code,
                 'errors': message,
-                'return': 1
+                'return': "500 Internal Server Error"
             }
         })
 
@@ -179,15 +180,20 @@ class ExtensionDetailsHandler(BaseHandler):
 
         if extension.output == 'combined':
             retcode, stdout = yield gen.Task(extension.execute, self.params)
+
+            # Get return values from SDK
             return_vals = self.find_return_values(stdout)
+            # Get subprocess reutrn code and make that the default
+            # return response. (Can be overriden by the user-supplied vals)
             return_stat = {"return": retcode}
+            # Merge the above two dicts
             job_results = return_stat.copy()
             job_results.update(return_vals)
             self.finish({
                 "debug": {
                     "out": self.filter_return_values(stdout)
                 },
-                "job": job_results
+                "request": job_results
             })
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
@@ -200,7 +206,7 @@ class ExtensionDetailsHandler(BaseHandler):
                     "out": self.filter_return_values(stdout),
                     "err": self.filter_return_values(stderr)
                 },
-                "job": job_results
+                "request": job_results
             })
     @asynchronous
     @gen.engine
@@ -222,7 +228,7 @@ class ExtensionDetailsHandler(BaseHandler):
                 "debug": {
                     "out": self.filter_return_values(stdout)
                 },
-                "job": job_results
+                "request": job_results
             })
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
@@ -235,7 +241,7 @@ class ExtensionDetailsHandler(BaseHandler):
                     "out": self.filter_return_values(stdout),
                     "err": self.filter_return_values(stderr)
                 },
-                "job": job_results
+                "request": job_results
             })
     @asynchronous
     @gen.engine
@@ -257,7 +263,7 @@ class ExtensionDetailsHandler(BaseHandler):
                 "debug": {
                     "out": self.filter_return_values(stdout)
                 },
-                "job": job_results
+                "request": job_results
             })
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
@@ -270,7 +276,7 @@ class ExtensionDetailsHandler(BaseHandler):
                     "out": self.filter_return_values(stdout),
                     "err": self.filter_return_values(stderr)
                 },
-                "job": job_results
+                "request": job_results
             })
 
     @asynchronous
@@ -293,7 +299,7 @@ class ExtensionDetailsHandler(BaseHandler):
                 "debug": {
                     "out": self.filter_return_values(stdout),
                 },
-                "job": job_results
+                "request": job_results
             })
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
@@ -306,7 +312,7 @@ class ExtensionDetailsHandler(BaseHandler):
                     "out": self.filter_return_values(stdout),
                     "err": self.filter_return_values(stderr)
                 },
-                "job": job_results
+                "request": job_results
             })
 
     def get_extension(self, extension_name, http_method):
@@ -325,6 +331,22 @@ class ExtensionDetailsHandler(BaseHandler):
 
         return extension
 
+    def process_value_literally(self, return_value):
+        """ jdk 2016 used by find_return_values() to convert
+        return values from strings into evaluated lists, dicts,
+        tuples, booleans, ints, booleans and none """
+        # If it's a casual string just print as a string literal
+        try:
+            if return_value[0].isalpha():
+                return return_value
+        except:
+            pass # skip this
+        # Evaluate as per the docstring with ast
+        try:
+            return ast.literal_eval(return_value)
+        except:
+            return return_value
+
     def find_return_values(self, output):
         """ parse output array for return response """
 
@@ -333,7 +355,7 @@ class ExtensionDetailsHandler(BaseHandler):
             if line.startswith('return_value'):
                 temp = line.replace("return_value", "").strip()
                 key, value = [item.strip() for item in temp.split('=')]
-                return_values[key] = value
+                return_values[key] = self.process_value_literally(value)
 
         return return_values
 

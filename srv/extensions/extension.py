@@ -214,8 +214,8 @@ class ToolKit():
         always put bound checks on any input in your code
         """
         if len(string) > maxlength:
-            print("{return_macro} troubleshoot=UNKNOWN".format(return_macro=Constants.API_RETURN_STRING))
-            print("{return_macro} return=500 Internal Server Error".format(return_macro=Constants.API_RETURN_STRING))
+            print("{return_macro} troubleshoot=['UNKNOWN']".format(return_macro=Constants.API_RETURN_STRING))
+            print("{return_macro} return='500 Internal Server Error'".format(return_macro=Constants.API_RETURN_STRING))
             exit(1)
 
     def harden_permissions(self, fname):
@@ -305,8 +305,8 @@ class Sanitize():
             #  This user may be fuzzing the API so 
             #   quietly exit stage right
             #    -->
-            print("{return_macro} return=500 Internal Server Error".format(return_macro=Constants.API_RETURN_STRING))
-            print("{return_macro} message=Framework encountered an internal error".format(
+            print("{return_macro} return='500 Internal Server Error'".format(return_macro=Constants.API_RETURN_STRING))
+            print("{return_macro} message='Framework encountered an internal error'".format(
                 return_macro=Constants.API_RETURN_STRING))
             self.err.print_stderr("An internal error has occurred.")
             exit(254)
@@ -337,8 +337,8 @@ class Sanitize():
             errmessage = "Forbidden characters found in input data"
 
         if fail > 0:
-            print("{return_macro} return=202 Accepted".format(return_macro=Constants.API_RETURN_STRING))
-            print("{return_macro} troubleshoot=BAD_INPUT".format(return_macro=Constants.API_RETURN_STRING))
+            print("{return_macro} return='202 Accepted'".format(return_macro=Constants.API_RETURN_STRING))
+            print("{return_macro} troubleshoot='BAD_INPUT'".format(return_macro=Constants.API_RETURN_STRING))
             self.err.print_stderr(errmessage)
             exit(fail)
 
@@ -450,8 +450,8 @@ class ParamHandle():
         Causes an error message then exits, used when a parameter is nil.
         """
         if self.is_nil(value):
-            print("{return_macro} troubleshoot=UNDEFINED_INPUT_ERROR".format(return_macro=Constants.API_RETURN_STRING))
-            print("{return_macro} return=422 Unprocessable Entity".format(return_macro=Constants.API_RETURN_STRING))
+            print("{return_macro} troubleshoot=['UNDEFINED_INPUT_ERROR']".format(return_macro=Constants.API_RETURN_STRING))
+            print("{return_macro} return='422 unprocessable_entity'".format(return_macro=Constants.API_RETURN_STRING))
             self.err.print_stderr(
                 "Parameter `{name}` provided with value: <NULL> which cannot be undefined".format(name=keyname))
             exit(500)
@@ -460,8 +460,8 @@ class ParamHandle():
         """
         Causes an error message then exits, used when a parameter is invalid.
         """
-        print("{return_macro} troubleshoot={indicator}".format(return_macro=Constants.API_RETURN_STRING,indicator=error_reason_indi))
-        print("{return_macro} return=422 Unprocessable Entity".format(return_macro=Constants.API_RETURN_STRING))
+        print("{return_macro} troubleshoot=['{indicator}']".format(return_macro=Constants.API_RETURN_STRING,indicator=error_reason_indi))
+        print("{return_macro} return='422 Unprocessable Entity'".format(return_macro=Constants.API_RETURN_STRING))
         self.err.print_stderr("Parameter `{key}` provided with value: {param}, expected: {expect} value.".format(
             key=keyname, expect=expected_msg, param=value))
         exit(500)

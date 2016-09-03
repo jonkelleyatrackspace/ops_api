@@ -1,6 +1,6 @@
 # opsAPI
 
-Lightweight API framework with simple extension SDK to allow rapid prototype of infrastructure-as-a-service concepts.
+Lightweight API framework with simple extension SDK to allow rapid prototype of fairly complex infrastructure-as-a-service concepts.
 
 Use the apache htpasswd utility (from `apache2-utils` or `httpd-tools`), to create your htpasswd files.
 
@@ -30,8 +30,8 @@ You should see this response:
             "err": [],
             "out": []
         },
-        "job": {
-            "age": "31",
+        "request": {
+            "age": 31,
             "current_datetime": "2016-09-03 21:35:00.877164",
             "name": "bob",
             "return": "You were born in 1985"
