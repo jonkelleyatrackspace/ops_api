@@ -2,4 +2,4 @@
 
 ### Version 0.1
 
-- x
+- Added ability for paver to install pip dependecies.
