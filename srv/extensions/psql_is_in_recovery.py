@@ -109,7 +109,7 @@ else:
         return=Constants.API_RETURN_STRING,
         status=pg_is_in_recovery))
     print("{status}=rollback".format(status=Constants.API_SUMMARY_STRING))
-    print("{errReason}={reasons}".format(reasons=error_hint,
-        errReason=Constants.API_ERROR_STRING))
+    print("{errors}={reasons}".format(reasons=error_hint,
+        errors=Constants.API_ERROR_STRING))
 
 toolkit.exit(exitcode)

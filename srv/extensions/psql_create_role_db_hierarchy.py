@@ -226,7 +226,7 @@ else:
     if len(error_hint) == 0:
         error_hint = ['UNKNOWN']
     print("{status}=rollback".format(status=Constants.API_SUMMARY_STRING))
-    print("{errReason}={reasons}".format(reasons=error_hint,
-        errReason=Constants.API_ERROR_STRING))
+    print("{errors}={reasons}".format(reasons=error_hint,
+        errors=Constants.API_ERROR_STRING))
 
 toolkit.exit(exitcode)

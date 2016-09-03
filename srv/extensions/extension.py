@@ -185,6 +185,15 @@ class Environment():
         return params
 
 
+class SecurityFaultInvalidFileAccessAttemp(Exception):
+    """ This will be raised if somehow a non-tmp file is attempted to be written to.
+        This should require tmp in the file path or name severely limiting access scope.
+    """
+    def __init___(self,dErrorArguments):
+        Exception.__init__(self,"{0}".format(dErrArguments))
+        self.dErrorArguments = dErrorArguements
+
+
 class ToolKit():
     """
     CLASS: Misc. functions
@@ -217,6 +226,19 @@ class ToolKit():
         #gid = getpwnam('postgres').pw_gid
         chmod(fname, 0777)      # o+rw
         # chown(fname, uid, gid)  # chown postgres: fname
+
+    def write_to_file(self, filepath, text=""):
+        """
+        Writes text to a tmp file, used to update tmp files
+
+        :return f.name: the name of the file written to
+        """
+        if "/tmp/tmp" not in filepath:
+            raise SecurityFaultInvalidFileAccessAttempt(filepath)
+        with open(filepath, "w") as f:
+            f.write("{text}".format(
+                text=text))
+            return f.name
 
     def write_temp(self, content):
         """
