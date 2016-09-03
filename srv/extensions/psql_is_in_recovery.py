@@ -82,11 +82,11 @@ if exitcode > 0:
 # Report Output
 if exitcode == 0:
     # We good
-    print("{return} server_type={server_class}".format(
-        return=Constants.API_RETURN_STRING,
+    print("{status} server_type={server_class}".format(
+        status=Constants.API_RETURN_STRING,
         server_class=server_class))
-    print("{return} pg_is_in_recovery={status}".format(
-        return=Constants.API_RETURN_STRING,
+    print("{status} pg_is_in_recovery={status}".format(
+        status=Constants.API_RETURN_STRING,
         status=pg_is_in_recovery))
     print("{status}=ok".format(status=Constants.API_SUMMARY_STRING))
 else:
@@ -102,11 +102,11 @@ else:
         error_hint.append('CANNOT_DETERMINE_REPLICATION_STATUS')
     if len(error_hint) == 0:
         error_hint = ['UNKNOWN']
-    print("{return} server_type={server_class}".format(
-        return=Constants.API_RETURN_STRING,
+    print("{status} server_type={server_class}".format(
+        status=Constants.API_RETURN_STRING,
         server_class=server_class))
-    print("{return} pg_is_in_recovery={status}".format(
-        return=Constants.API_RETURN_STRING,
+    print("{status} pg_is_in_recovery={status}".format(
+        status=Constants.API_RETURN_STRING,
         status=pg_is_in_recovery))
     print("{status}=rollback".format(status=Constants.API_SUMMARY_STRING))
     print("{errors}={reasons}".format(reasons=error_hint,

@@ -118,7 +118,7 @@ class BaseHandler(RequestHandler):
             'request': {
                 'status': status_code,
                 'errors': message,
-                'return': "500 Internal Server Error"
+                'status': "500 Internal Server Error"
             }
         })
 
@@ -185,7 +185,7 @@ class ExtensionDetailsHandler(BaseHandler):
             return_vals = self.find_return_values(stdout)
             # Get subprocess reutrn code and make that the default
             # return response. (Can be overriden by the user-supplied vals)
-            return_stat = {"return": retcode}
+            return_stat = {"status": retcode}
             # Merge the above two dicts
             job_results = return_stat.copy()
             job_results.update(return_vals)
@@ -198,7 +198,7 @@ class ExtensionDetailsHandler(BaseHandler):
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
             return_vals = self.find_return_values(stdout)
-            return_stat = {"return": retcode}
+            return_stat = {"status": retcode}
             job_results = return_stat.copy()
             job_results.update(return_vals)
             self.finish({
@@ -221,7 +221,7 @@ class ExtensionDetailsHandler(BaseHandler):
         if extension.output == 'combined':
             retcode, stdout = yield gen.Task(extension.execute, self.params)
             return_vals = self.find_return_values(stdout)
-            return_stat = {"return": retcode}
+            return_stat = {"status": retcode}
             job_results = return_stat.copy()
             job_results.update(return_vals)
             self.finish({
@@ -233,7 +233,7 @@ class ExtensionDetailsHandler(BaseHandler):
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
             return_vals = self.find_return_values(stdout)
-            return_stat = {"return": retcode}
+            return_stat = {"status": retcode}
             job_results = return_stat.copy()
             job_results.update(return_vals)
             self.finish({
@@ -256,7 +256,7 @@ class ExtensionDetailsHandler(BaseHandler):
         if extension.output == 'combined':
             retcode, stdout = yield gen.Task(extension.execute, self.params)
             return_vals = self.find_return_values(stdout)
-            return_stat = {"return": retcode}
+            return_stat = {"status": retcode}
             job_results = return_stat.copy()
             job_results.update(return_vals)
             self.finish({
@@ -268,7 +268,7 @@ class ExtensionDetailsHandler(BaseHandler):
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
             return_vals = self.find_return_values(stdout)
-            return_stat = {"return": retcode}
+            return_stat = {"status": retcode}
             job_results = return_stat.copy()
             job_results.update(return_vals)
             self.finish({
@@ -292,7 +292,7 @@ class ExtensionDetailsHandler(BaseHandler):
         if extension.output == 'combined':
             retcode, stdout = yield gen.Task(extension.execute, self.params)
             return_vals = self.find_return_values(stdout)
-            return_stat = {"return": retcode}
+            return_stat = {"status": retcode}
             job_results = return_stat.copy()
             job_results.update(return_vals)
             self.finish({
@@ -304,7 +304,7 @@ class ExtensionDetailsHandler(BaseHandler):
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
             return_vals = self.find_return_values(stdout)
-            return_stat = {"return": retcode}
+            return_stat = {"status": retcode}
             job_results = return_stat.copy()
             job_results.update(return_vals)
             self.finish({

@@ -65,7 +65,7 @@ print("{status} name={who}".format(
 print("{status} age={age}".format(
   status=Constants.API_RETURN_STRING,
   age=arguement['age']))
-print("{status} return=You were born in {year}".format(
+print("{status} status=You were born in {year}".format(
   status=Constants.API_RETURN_STRING,
   year=birthyear))
 
