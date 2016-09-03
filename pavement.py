@@ -42,23 +42,23 @@ def chmod_dash_r(path, mode):
 
 @task
 @needs('install')
-def load_blueprints(options):
+def load_extensions(options):
     """
-    LOAD the blueprints
+    LOAD the extensions
     """
-    if os.path.isdir("/srv/blueprints"):
-        shutil.rmtree("/srv/blueprints")
-    shutil.copytree("./srv/blueprints", ("/srv/blueprints"))
-    chmod_dash_r("/srv/blueprints", 0755)
+    if os.path.isdir("/srv/pyjojo"):
+        shutil.rmtree("/srv/pyjojo")
+    shutil.copytree("./srv/pyjojo", ("/srv/pyjojo"))
+    chmod_dash_r("/srv/pyjojo", 0755)
 
 
 @task
-@needs('load_blueprints')
+@needs('load_extensions')
 def start():
     """
     START a dev instance for test
     """
-    sh('opsapi --dir=/srv/blueprints')
+    sh('opsapi --dir=/srv/pyjojo')
 
 
 @task
