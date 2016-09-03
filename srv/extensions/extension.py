@@ -354,6 +354,7 @@ class ParamHandle():
     name = ""        # Key name of the param  EXAMPLE: "database_host"
     value = ""        # Value of the parameter EXAMPLE: "8.8.8.8"
     max_length = -1        # Maximum len() for value without erroring (-1 is infinite)
+    max_int = -1     # Maximum integer without raising an error (must be an int)
     require = False     # Generate API error(s) if value is not supplied.
     sanitizer = None      # Set to the string sanitizer used before returning the
     # use input. Can be None, 'sql', 'nonalphanumeric'
@@ -397,7 +398,19 @@ class ParamHandle():
                 msg = "input less than {max} bytes".format(max=self.max_length)
                 self.raise_error(keyname=self.name,
                                  value='too large', expected_msg=msg,
-                                 error_reason_indi="BUFFER_OUT_OF_SPACE")
+                                 error_reason_indi="INPUT_BUFFER_SIZE")
+        if self.max_int > 1:
+            try:
+                int(self.value)
+            except:
+                self.raise_error(keyname=self.name, value=self.value,
+                                 expected_msg="PARAMETER_ERROR_IS_NOT_INTEGER",
+                                 error_reason_indi="INPUT_NOT_AN_INT")
+            if int(self.value) > self.max_int:
+                ex = "INT_GREATER_THAN_{INT}".format(INT=self.max_int)
+                self.raise_error(keyname=self.name, value=ex,
+                                 expected_msg="smaller integer",
+                                 error_reason_indi="INTEGER_SIZE")
 
         # Check for overrides that will return a default value if the input is
         # nil.

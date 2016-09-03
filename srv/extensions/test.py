@@ -48,6 +48,7 @@ age.value = params[param]
 age.name = param
 age.require = True
 age.max_length = 3
+age.max_int = 99
 arguement[param] = age.get()
 # Calculate cake day
 birthyear =  dt.year - int(arguement['age'])
