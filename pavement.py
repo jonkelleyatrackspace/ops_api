@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # file: pavement.py
-# author: jonathan kelley 2016
+# authors: jonathan kelley 2016
 
 from paver.easy import *
 import paver.doctools
