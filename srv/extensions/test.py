@@ -57,17 +57,14 @@ birthyear =  dt.year - int(arguement['age'])
 # *************
 # *  RESULTS  *
 # *************
-print("{status} current_datetime={dt}".format(
+print(("{status} current_datetime={datetime}\n"
+  "{status} name={whom}\n"
+  "{status} age={age}\n"
+  "{status} status=You were born in {year}").format(
   status=Constants.API_RETURN_STRING,
-  dt=dt))
-print("{status} name={who}".format(
-  status=Constants.API_RETURN_STRING,
-  who=arguement['name']))
-print("{status} age={age}".format(
-  status=Constants.API_RETURN_STRING,
-  age=arguement['age']))
-print("{status} status=You were born in {year}".format(
-  status=Constants.API_RETURN_STRING,
-  year=birthyear))
+  age=arguement['age'],
+  whom=arguement['name'],
+  year=birthyear,
+  datetime=dt))
 
 exit(0)
