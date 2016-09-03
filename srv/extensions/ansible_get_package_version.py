@@ -68,6 +68,9 @@ output = run.ansible(ansible_opts)
 # *************
 # *  RESULTS  *
 # *************
-print("return_value ansible_options={opt}".format(opt=ansible_opts))
+print("{return} ansible_options={opt}".format(
+  return=Constants.API_RETURN_STRING,
+  opt=ansible_opts))
 print(output)
+
 exit(0)

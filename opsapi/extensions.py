@@ -26,6 +26,26 @@ import toro
 
 log = logging.getLogger(__name__)
 
+class SecurityFaultDangerousUserInput(Exception):
+    """ this will be raised if an escape sequence is attempted in parameters 
+        if you try to pull tricks, the json parser errors expecting a delimiter
+        (like a newline) but this can't be fulfilled because that triggers
+        this exception again, in a recurisve manner.
+
+        if you send the ANSI CR or LF characters you will also fail and be
+        trapped by the json decoder for invalid input as the pipes function
+        will escape those sort of control characters.
+
+        this should provide a reasonable layer of security unless there is
+        an attack on the regex, or python string libraries that is currently
+        unpublished.
+
+        as always, use a reasonable layer of authentication in front of this
+        API as absolutely no security measure is close to foolproof.
+    """
+    def __init___(self,dErrorArguments):
+        Exception.__init__(self,"{0}".format(dErrArguments))
+        self.dErrorArguments = dErrorArguements
 
 class ExtensionCollection(dict):
     """ load the collection of extensions """
@@ -123,9 +143,12 @@ class Extension(object):
     @gen.engine
     def do_execute(self, params, callback):
         env = self.create_env(params)
+        if env == False:
+            # If the environment has manipulated string input, raise
+            raise SecurityFaultDangerousUserInput(params)
+
         extension_dir = os.path.dirname(self.filename)
         os.chdir(extension_dir)
-        print(self.filename)
         if self.output == 'combined':
             child = Subprocess(
                 self.filename,
@@ -158,15 +181,32 @@ class Extension(object):
 
             callback((child.returncode, stdout.splitlines(), stderr.splitlines()))
 
+    def param_attempts_escape(self, parameter):
+        """
+        Perform a scan to see if this is an escaping parameter.
+        """
+        empty_parameter_value = "''\"'\"''\"'\"''"
+        open_sequence = len(tuple(re.finditer(r"''\"'\"'", parameter)))
+        close_sequence = len(tuple(re.finditer(r"'\"'\"''", parameter)))
+        escapes = open_sequence + close_sequence
+
+        if escapes > 0 and parameter != empty_parameter_value:
+            return True
+        else:
+            return False
+
     def create_env(self, input):
         output = {}
-
+        stop = False
         # add all the parameters as env variables
         for param in self.params:
             name = param['name']
             value = input.get(name, '')
-            output[name.upper()] = pipes.quote(pipes.quote(value))
+            real_param = pipes.quote(pipes.quote(value))
+            output[name.upper()] = real_param
 
+            if self.param_attempts_escape(real_param):
+                return False
         return output
 
     def metadata(self):

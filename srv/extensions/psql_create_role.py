@@ -173,8 +173,8 @@ sanitized_arguement[param] = connection_limit_bust.get()
 
 # Handling connection limit parsing requires advanced work
 #  While imposing limits and limit busting...
-phelper = Param()  # Using the parameter instance tools for validation.
-if phelper.is_nil(sanitized_arguement['connection_limit']):
+thisparam = Param()  # Using the parameter instance tools for validation.
+if thisparam.is_nil(sanitized_arguement['connection_limit']):
     # If no input, we plan on just setting 10 sockets.
     connection_limit = 10
 elif sanitized_arguement['connection_limit_bust']:
@@ -184,7 +184,7 @@ elif sanitized_arguement['connection_limit_bust']:
         # We expect a smaller value.
         msg = "value <{max}".format(
             max=Constants.POSTGRES_MAXIMUM_CONNECTION_LIMIT)
-        phelper.raise_error(
+        thisparam.raise_error(
             keyname='connection_limit',
             value=sanitized_arguement['connection_limit'],
             expected_msg=msg
@@ -197,7 +197,7 @@ else:
         # If the proposed limit is beyond the POSTGRES_CONNECTION_LIMIT, stop
         # We expect a smaller value.
         msg = "value <{max}".format(max=Constants.POSTGRES_CONNECTION_LIMIT)
-        phelper.raise_error(
+        thisparam.raise_error(
             keyname='connection_limit',
             value=sanitized_arguement['connection_limit'],
             expected_msg=msg
@@ -269,7 +269,7 @@ for line in output.split(linesep):
 # Report Output
 if exitcode == 0:
     # We good
-    print("return_value execution_status=ok")
+    print("{status}=ok".format(status=Constants.API_SUMMARY_STRING))
 else:
     # Errors should flag an API error code.
     error_hint = []
@@ -283,8 +283,8 @@ else:
         error_hint.append('FATAL_ERROR')
     if len(error_hint) == 0:
         error_hint = ['UNKNOWN']
-    print("return_value execution_status=rollback")
-    print("return_value error_reason_indicator={error}".format(
-        error=error_hint))
+    print("{status}=rollback".format(status=Constants.API_SUMMARY_STRING))
+    print("{errReason}={reasons}".format(reasons=error_hint,
+        errReason=Constants.API_ERROR_STRING))
 
 toolkit.exit(exitcode)

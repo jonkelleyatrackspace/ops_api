@@ -19,7 +19,7 @@
 # -- config --
 
 from os import linesep
-from extension import CmdRun, ToolKit
+from extension import CmdRun, ToolKit, Constants
 
 # Spawn Instances
 run = CmdRun()   # <class> Run
@@ -38,6 +38,6 @@ sql_code = toolkit.write_temp(sql)
 # ****************
 output = run.sql(sql_code)
 print(output)
-print("return_value execution_status=ok")
+print("{status}=ok".format(status=Constants.API_SUMMARY_STRING))
 
 toolkit.exit(0)

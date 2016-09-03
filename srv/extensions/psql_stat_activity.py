@@ -18,7 +18,7 @@
 # tags: Postgres, PGaaS, cit-ops
 # -- config --
 
-from extension import ToolKit, CmdRun
+from extension import ToolKit, CmdRun, Constants
 
 # Spawn Instances
 toolkit = ToolKit()
@@ -41,5 +41,6 @@ output = run.sql(sql_code)
 # *  OUTPUT PROCESSOR  *
 # **********************
 print(output)
-print("return_value execution_status=ok")
+print("{status}=ok".format(status=Constants.API_SUMMARY_STRING))
+
 toolkit.exit()

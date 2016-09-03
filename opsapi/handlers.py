@@ -111,12 +111,13 @@ class BaseHandler(RequestHandler):
 
         self.write({
             'debug': {
-                'err': message
+                'err': [httplib.responses[status_code]],
+                'out': ['']
             },
             'job': {
                 'status': status_code,
-                'type': httplib.responses[status_code],
-                'results': {}
+                'errors': message,
+                'return': 1
             }
         })
 

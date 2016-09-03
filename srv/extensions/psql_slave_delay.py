@@ -19,7 +19,7 @@
 # -- config --
 
 from os import linesep
-from extension import CmdRun, ToolKit
+from extension import CmdRun, ToolKit, Constants
 import re
 
 # Spawn Instances
@@ -85,7 +85,7 @@ else:
 # Report Output
 if exitcode == 0:
     # We good
-    print("return_value execution_status=ok")
+    print("{status}=ok".format(status=Constants.API_SUMMARY_STRING))
 else:
     # Errors should flag an API error code.
     error_hint = []
@@ -97,12 +97,13 @@ else:
         error_hint.append('REPLICA_DELAY_SELECT_WAS_EMPTY')
     if len(error_hint) == 0:
         error_hint = ['UNKNOWN']
-    print("return_value execution_status=rollback")
-    print("return_value error_reason_indicator={error}".format(
-        error=error_hint))
+    print("{status}=rollback".format(status=Constants.API_SUMMARY_STRING))
+    print("{errReason}={reasons}".format(reasons=error_hint,
+        errReason=Constants.API_ERROR_STRING))
 
-print("return_value slave_delay={ts}".format(ts=delay))
-print("return_value slave_delta_in_seconds={ts}".format(
+print("{return} slave_delay={ts}".format(return=Constants.API_RETURN_STRING, ts=delay))
+print("{return} slave_delta_in_seconds={ts}".format(
+    return=Constants.API_RETURN_STRING,
     ts=delay_sum_seconds))
 
 toolkit.exit(exitcode)

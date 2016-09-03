@@ -417,5 +417,8 @@ output = run.ansible(sanitized_arguement)
 # *  RESULTS  *
 # *************
 print(output)
-print("return_value ansible_options={opt}".format(opt=ansible_opts))
+print("{return} ansible_options={opt}".format(
+  return=Constants.API_RETURN_STRING,
+  opt=ansible_opts))
+
 exit(0)

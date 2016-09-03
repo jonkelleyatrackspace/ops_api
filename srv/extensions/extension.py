@@ -147,6 +147,11 @@ class Constants():
     LINUX_MAX_FILE_NAME_LENGTH = 255
     LINUX_MAX_FILE_PATH_LENGTH = 4096
 
+    # These are the api status output keys
+    API_RETURN_STRING = "return_value"
+    API_SUMMARY_STRING = "{v} status".format(v=API_RETURN_STRING)
+    API_ERROR_STRING = "{v} errors".format(v=API_RETURN_STRING)
+
     # Postgres uses  no more than  NAMEDATALEN-1 bytes
     # of an  identifier;  longer names can be written in
     # commands, but they will be truncated.  By default,
@@ -200,8 +205,8 @@ class ToolKit():
         It's a security bailout
         """
         if len(string) > maxlength:
-            print("return_value execution_status=rollback")
-            print("return_value error_reason_indicator=UNKNOWN")
+            print("{return_macro} status=rollback".format(return_macro=Constants.API_RETURN_STRING))
+            print("{return_macro} troubleshoot=UNKNOWN".format(return_macro=Constants.API_RETURN_STRING))
             exit(1)
 
     def harden_permissions(self, fname):
@@ -278,7 +283,9 @@ class Sanitize():
             #  This user may be fuzzing the API so 
             #   quietly exit stage right
             #    -->
-            print("return_value execution_status=500")
+            print("{return_macro} status=500".format(return_macro=Constants.API_RETURN_STRING))
+            print("{return_macro} message=Framework encountered an internal error".format(
+                return_macro=Constants.API_RETURN_STRING))
             self.err.print_stderr("An internal error has occurred.")
             exit(254)
         else:
@@ -305,15 +312,14 @@ class Sanitize():
 
         if len(tuple(regex.finditer(r"%", sql))):
             fail = 240
-            errmessage = "Patterns are not allowed in parameters"
+            errmessage = "Forbidden characters found in input data"
 
         if fail > 0:
-            print("return_value execution_status=500")
+            print("{return_macro} status=400".format(return_macro=Constants.API_RETURN_STRING))
             self.err.print_stderr(errmessage)
             exit(fail)
 
         return sql
-
 
 class ParamHandle():
     """
@@ -421,7 +427,7 @@ class ParamHandle():
         Causes an error message then exits, used when a parameter is nil.
         """
         if self.is_nil(value):
-            print("return_value error_reason_indicator=UNDEFINED_INPUT_ERROR")
+            print("{return_macro} troubleshoot=UNDEFINED_INPUT_ERROR".format(return_macro=Constants.API_RETURN_STRING))
             self.err.print_stderr(
                 "Parameter `{name}` provided with value: <NULL> which cannot be undefined".format(name=keyname))
             exit(500)
@@ -430,7 +436,7 @@ class ParamHandle():
         """
         Causes an error message then exits, used when a parameter is invalid.
         """
-        print("return_value error_reason_indicator={indicator}".format(indicator=error_reason_indi))
+        print("{return_macro} troubleshoot={indicator}".format(return_macro=Constants.API_RETURN_STRING,indicator=error_reason_indi))
         self.err.print_stderr("Parameter `{key}` provided with value: {param}, expected: {expect} value.".format(
             key=keyname, expect=expected_msg, param=value))
         exit(500)
@@ -474,33 +480,4 @@ class ParamHandle():
             self.isbool = custom_badinput_value
 
 if __name__ == "__main__":
-    # Just quit.
-    exit(0)
-    # pkill pyjojo; pyjojo -d --dir /srv/pyjojo&
-    # curl -XPOST http://localhost:3000/scripts/createrole -H "Content-Type: application/json" -d '{ "role": "x","password": "qwerty", "login": "true"}' | python -m json.tool
-    # curl -XPOST http://localhost:3000/scripts/createrole -H "Content-Type: application/json" -d '{ "role": "x","password": "qwerty", "login": "true", "connection_limit": "5"}' | python -m json.tool
-    # curl -XPOST http://localhost:3000/scripts/createrole -H "Content-Type: application/json" -d '{ "role": "x","password": "qwerty", "login": "true", "connection_limit": "555"}' | python -m json.tool
-    #
-    # HACK CHECK
-    #  INSERT NULL THEN DROP postgres; 500 error
-    # curl -XPOST http://localhost:3000/scripts/createrole -H "Content-Type: application/json" -d '{ "role": "jon\x00DROP DATABASE postgres; kelley","password": "test",  "login": "true", "connection_limit": "5"}' | python -m json.tool
-    #  INSERT NULL THEN DROP postgres; 500 error
-    # curl -XPOST http://localhost:3000/scripts/createrole -H "Content-Type: application/json" -d '{ "role": "jonфу\x00张明安\x00фус张明安\r在\x00;DROP DATABASE postgres; kelley","password": "test",  "login": "true", "connection_limit": "5"}' | python -m json.tool
-    # HACK CHECK
-    #  INSERT escape ; then DROP postgres; 500 error
-    # curl -XPOST http://localhost:3000/scripts/createrole -H "Content-Type: application/json" -d '{ "role": "jon\;DROP DATABASE postgres; kelley","password": "test",  "login": "true", "connection_limit": "5"}' | python -m json.tool
-    # HACK CHECK
-    #  INSERT escape escape ; then DROP postgres; 500 error
-    # curl -XPOST http://localhost:3000/scripts/createrole -H "Content-Type: application/json" -d '{ "role": "jon\\;DROP DATABASE postgres; kelley","password": "test",  "login": "true", "connection_limit": "5"}' | python -m json.tool
-    # HACK CHECK
-    #  INSERT escape escape escape ; then DROP postgres; 500 error
-    # curl -XPOST http://localhost:3000/scripts/createrole -H "Content-Type: application/json" -d '{ "role": "jon\\\;DROP DATABASE postgres; kelley","password": "test",  "login": "true", "connection_limit": "5"}' | python -m json.tool
-    # HACK CHECK
-    #  INSERT escape escape escape escape ; then DROP postgres; 500 error
-    # curl -XPOST http://localhost:3000/scripts/createrole -H "Content-Type: application/json" -d '{ "role": "jon\\\\;DROP DATABASE postgres; kelley","password": "test",  "login": "true", "connection_limit": "5"}' | python -m json.tool
-    # postgres=# DROP DATABASE acme_staging\\\\\\;
-    # Invalid command \. Try \? for help.
-    #
-    # See scripts
-    # curl -XGET http://localhost:3000/scripts/ -H "Content-Type:
-    # application/json" | python -m json.tool
+    exit(1)

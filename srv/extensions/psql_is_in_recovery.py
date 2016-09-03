@@ -19,7 +19,7 @@
 # -- config --
 
 from os import linesep
-from extension import CmdRun, ToolKit
+from extension import CmdRun, ToolKit, Constants
 
 # Spawn Instances
 run = CmdRun()        # <class> Run
@@ -82,11 +82,13 @@ if exitcode > 0:
 # Report Output
 if exitcode == 0:
     # We good
-    print("return_value server_type={server_class}".format(
+    print("{return} server_type={server_class}".format(
+        return=Constants.API_RETURN_STRING,
         server_class=server_class))
-    print("return_value pg_is_in_recovery={status}".format(
+    print("{return} pg_is_in_recovery={status}".format(
+        return=Constants.API_RETURN_STRING,
         status=pg_is_in_recovery))
-    print("return_value execution_status=ok")
+    print("{status}=ok".format(status=Constants.API_SUMMARY_STRING))
 else:
     # Errors should flag an API error code.
     error_hint = []
@@ -100,12 +102,14 @@ else:
         error_hint.append('CANNOT_DETERMINE_REPLICATION_STATUS')
     if len(error_hint) == 0:
         error_hint = ['UNKNOWN']
-    print("return_value server_type={server_class}".format(
+    print("{return} server_type={server_class}".format(
+        return=Constants.API_RETURN_STRING,
         server_class=server_class))
-    print("return_value pg_is_in_recovery={status}".format(
+    print("{return} pg_is_in_recovery={status}".format(
+        return=Constants.API_RETURN_STRING,
         status=pg_is_in_recovery))
-    print("return_value execution_status=rollback")
-    print("return_value error_reason_indicator={error}".format(
-        error=error_hint))
+    print("{status}=rollback".format(status=Constants.API_SUMMARY_STRING))
+    print("{errReason}={reasons}".format(reasons=error_hint,
+        errReason=Constants.API_ERROR_STRING))
 
 toolkit.exit(exitcode)
