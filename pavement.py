@@ -63,13 +63,15 @@ def load_extensions(options):
     sudo_warning()
     if os.path.isdir("/srv/pyjojo"):
         shutil.rmtree("/srv/pyjojo")
-    shutil.copytree("./srv/pyjojo", ("/srv/pyjojo"))
+    shutil.copytree("./srv/blueprints", ("/srv/pyjojo"))
     chmod_dash_r("/srv/pyjojo", 0755)
 
 @task
-def install_deps():
+@needs('load_extensions')
+def setup():
     """
-    INSTALL_DEPS for the package to run
+    SETUP the application by loading the python package, extensions, 
+    and pip requirements.
     """
     sudo_warning()
     for dependecy in install_requires:
@@ -79,7 +81,7 @@ def install_deps():
 @needs('load_extensions')
 def start():
     """
-    START a dev instance for test
+    START a local dev instance for testing
     """
     sudo_warning()
     sh('opsapi --dir=/srv/pyjojo')
@@ -88,7 +90,7 @@ def start():
 @task
 def clean(options):
     """
-    CLEAN after paver operations
+    CLEAN after paver build operations
     """
     for i in ['./dist', './build', './opsapi.egg-info']:
         print("Removing {file}".format(file=i))
