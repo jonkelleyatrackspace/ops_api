@@ -15,31 +15,34 @@ Start a local dev server:
 
     paver start
 
-Start a local dev server:
+Start copy extensions from local git clone to /srv/:
 
-    paver start
+    paver load_extensions
+
+Build RPM artefact:
+
+    paver build_rpm
 
 ## Tutorial
 
 Start up opsapi and hit it with curl:
 
     opsapi -d --dir /srv/extensions
-    curl -XPOST http://localhost:3000/extensions/echo -H "Content-Type: application/json" -d '{"text": "hello world!"}'
+    curl -XPOST http://localhost:3000/extensions/test -H "Content-Type: application/json" -d '{ "name": "bob", "age": "31"}''{"text": "hello world!"}'
 
 You should see this as a response:
 
-    "debug": {
-        "err": [],
-        "out": [
-            "echo'd text: hello world!"
-        ]
-    },
-    "job": {
-        "results": {
-            "age": "99",
-            "name": "bob"
+    {
+        "debug": {
+            "err": [],
+            "out": []
         },
-        "status": 0
+        "job": {
+            "age": "31",
+            "current_datetime": "2016-09-03 21:35:00.877164",
+            "name": "bob",
+            "return": "You were born in 1985"
+        }
     }
 
 ## Usage
