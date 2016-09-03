@@ -323,7 +323,7 @@ def create_script(script_name, filename):
             continue
 
         # ignore PEP 263 Source Code Encodings
-        if line.startswith("# -*- coding: ") or line.startswith("# coding=") or line.startswith("vim: set fileencoding="):
+        if line.startswith("# -*- coding: ") or line.startswith("# coding=") or line.startswith("# vim: set fileencoding="):
             continue
 
         log.warn("unrecognized line in jojo block: {0}".format(line))
