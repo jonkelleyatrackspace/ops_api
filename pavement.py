@@ -60,7 +60,7 @@ def load_extensions(options):
     """
     LOAD the extensions
     """
-    warn_if_high_uid()
+    sudo_warning()
     if os.path.isdir("/srv/pyjojo"):
         shutil.rmtree("/srv/pyjojo")
     shutil.copytree("./srv/pyjojo", ("/srv/pyjojo"))
@@ -71,7 +71,7 @@ def install_deps():
     """
     INSTALL_DEPS for the package to run
     """
-    warn_if_high_uid()
+    sudo_warning()
     for dependecy in install_requires:
         sh('pip install {package}'.format(package=dependecy))
 
@@ -81,7 +81,7 @@ def start():
     """
     START a dev instance for test
     """
-    warn_if_high_uid()
+    sudo_warning()
     sh('opsapi --dir=/srv/pyjojo')
 
 
