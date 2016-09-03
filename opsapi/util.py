@@ -20,7 +20,7 @@ import sys
 import tornado.web
 
 from opsapi.config import config
-from opsapi.scripts import create_collection
+from opsapi.extensions import create_collection
 
 log = logging.getLogger(__name__)
 
@@ -70,7 +70,7 @@ def create_application(debug):
 
     application = tornado.web.Application(
         route.get_routes(),
-        scripts=create_collection(config['directory']),
+        extensions=create_collection(config['directory']),
         debug=debug
     )
 

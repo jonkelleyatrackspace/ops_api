@@ -22,6 +22,7 @@ from opsapi.servers import http_server, https_server, unix_socket_server
 
 log = logging.getLogger(__name__)
 
+
 def main():
     """ entry point for the application """
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# file: scripts.py
+# file: extensions.py
 # authors: jonathan kelley, anthony tarola
 # ---
 # license: the mit license
@@ -27,17 +27,17 @@ import toro
 log = logging.getLogger(__name__)
 
 
-class ScriptCollection(dict):
-    """ load the collection of scripts """
+class ExtensionCollection(dict):
+    """ load the collection of extensions """
 
     def __init__(self, *args, **kwargs):
         dict.__init__(self, *args, **kwargs)
-        
+
     def metadata(self, tags):
-        """ return the metadata for all of the scripts, keyed by name """
-        
+        """ return the metadata for all of the extensions, keyed by name """
+
         output = {}
-        
+
         for key, value in self.items():
 
             if (tags['tags']) or (tags['not_tags']) or (tags['any_tags']):
@@ -48,7 +48,7 @@ class ScriptCollection(dict):
                     output[key] = value.metadata()
                     for tag in tags['not_tags']:
                         if (tag in value.tags):
-                            output.pop(key,None)
+                            output.pop(key, None)
                             break
                 for tag in tags['any_tags']:
                     if tag in value.tags:
@@ -56,11 +56,11 @@ class ScriptCollection(dict):
                         break
             else:
                 output[key] = value.metadata()
-        
+
         return output
 
     def name(self, tags):
-        """ return a list of just the names of all scripts """
+        """ return a list of just the names of all extensions """
 
         output = []
 
@@ -85,9 +85,9 @@ class ScriptCollection(dict):
         return output
 
 
-class Script(object):
-    """ a single script in the directory """
-    
+class Extension(object):
+    """ a single route extension in the directory """
+
     def __init__(self, filename, name, description, params, filtered_params, tags, http_method, output, needs_lock):
         self.lock = toro.Lock()
         self.filename = filename
@@ -102,15 +102,16 @@ class Script(object):
 
     def filter_params(self, params):
         filtered_params = dict(params)
-        for k,v in filtered_params.items():
+        for k, v in filtered_params.items():
             if k in self.filtered_params:
                 filtered_params[k] = 'FILTERED'
         return filtered_params
 
     @gen.engine
     def execute(self, params, callback):
-        log.info("Executing script: {0} with params: {1}".format(self.filename, self.filter_params(params)))
-        
+        log.info("Executing extension: {0} with params: {1}".format(
+            self.filename, self.filter_params(params)))
+
         if self.needs_lock:
             with (yield gen.Task(self.lock.aquire)):
                 response = yield gen.Task(self.do_execute, params)
@@ -122,50 +123,50 @@ class Script(object):
     @gen.engine
     def do_execute(self, params, callback):
         env = self.create_env(params)
-        script_dir = os.path.dirname(self.filename)
-        os.chdir(script_dir)
+        extension_dir = os.path.dirname(self.filename)
+        os.chdir(extension_dir)
         print(self.filename)
         if self.output == 'combined':
             child = Subprocess(
-                    self.filename,
-                    env=env,
-                    stdout=Subprocess.STREAM,
-                    stderr=subprocess.STDOUT,
-                    io_loop=IOLoop.instance()
-                )
-        
+                self.filename,
+                env=env,
+                stdout=Subprocess.STREAM,
+                stderr=subprocess.STDOUT,
+                io_loop=IOLoop.instance()
+            )
+
             retcode, stdout = yield [
                 gen.Task(child.set_exit_callback),
                 gen.Task(child.stdout.read_until_close)
             ]
-            
+
             callback((child.returncode, stdout.split()))
         else:
             child = Subprocess(
-                    self.filename,
-                    env=env,
-                    stdout=Subprocess.STREAM,
-                    stderr=Subprocess.STREAM,
-                    io_loop=IOLoop.instance()
-                )
-        
+                self.filename,
+                env=env,
+                stdout=Subprocess.STREAM,
+                stderr=Subprocess.STREAM,
+                io_loop=IOLoop.instance()
+            )
+
             retcode, stdout, stderr = yield [
                 gen.Task(child.set_exit_callback),
                 gen.Task(child.stdout.read_until_close),
                 gen.Task(child.stderr.read_until_close)
             ]
-            
+
             callback((child.returncode, stdout.splitlines(), stderr.splitlines()))
 
     def create_env(self, input):
         output = {}
-        
+
         # add all the parameters as env variables
         for param in self.params:
             name = param['name']
             value = input.get(name, '')
             output[name.upper()] = pipes.quote(pipes.quote(value))
-        
+
         return output
 
     def metadata(self):
@@ -184,14 +185,15 @@ class Script(object):
     def __repr__(self):
         return "<{0} {1}>".format(self.__class__.__name__, self.metadata())
 
+
 def create_collection(directory):
-    """ create the script collection for the directory """
-    
-    log.info("Getting scripts from directory {0}".format(directory))
-    
-    collection = ScriptCollection()
-    
-    for (dirpath, _, filenames) in os.walk(directory):                
+    """ create the extension collection for the directory """
+
+    log.info("Getting extension from directory {0}".format(directory))
+
+    collection = ExtensionCollection()
+
+    for (dirpath, _, filenames) in os.walk(directory):
         for filename in filenames:
             # grab the file's absolute path, and name
             path = os.path.join(dirpath, filename)
@@ -201,19 +203,20 @@ def create_collection(directory):
             name = path.replace(directory + os.sep, '')
             name = '.'.join(name.split(".")[:-1])
             name = re.sub(r'(\W)+', '_', name)
-            
-            log.info("Adding script with name: {0} and path: {1}".format(name, full_path))
-            script = create_script(name, full_path)
-            
-            if script is not None:
-                collection[name] = script
+
+            log.info("Adding extension with name: {0} and path: {1}".format(
+                name, full_path))
+            extension = create_extension(name, full_path)
+
+            if extension is not None:
+                collection[name] = extension
 
     return collection
 
 
-def create_script(script_name, filename):
-    """ parse a script, returning a Script object """
-    
+def create_extension(extension_name, filename):
+    """ parse a extension, returning a Extension object """
+
     # script defaults
     description = None
     params = []
@@ -222,65 +225,67 @@ def create_script(script_name, filename):
     http_method = 'post'
     output = 'split'
     lock = False
-    
+
     # warn the user if we can't execute this file
     if not os.access(filename, os.X_OK):
         log.error("Filename {0} not executable, file ignored".format(filename))
         return None
-    
+
     # grab file contents
     with open(filename) as f:
         contents = list(f)
-    
+
     in_block = False
-    
+
     # loop over the contents of the file
-    for line in contents:        
-        
+    for line in contents:
+
         # all lines should be bash style comments
         if not line.startswith("#"):
             continue
-                
+
         # we don't need the first comment, or extranious whitespace
         line = line.replace("#", "").strip()
-        
+
         # start of the extension block
         if not in_block and line.startswith("-- config --"):
             in_block = True
             continue
-        
+
         # end of the extension block, so we'll stop here
         if in_block and line.startswith("-- config --"):
             in_block = False
             break
-        
+
         # make sure the line is good
         if not ':' in line:
             continue
-        
+
         # prep work for later
         key, value = [item.strip() for item in line.split(':')]
-        
+
         # description
         if in_block and key == "description":
             description = value
             continue
-        
+
         # http_method
         if in_block and key == "http_method":
-            if value.lower() in ['get','post','put','delete']:
+            if value.lower() in ['get', 'post', 'put', 'delete']:
                 http_method = value.lower()
                 continue
             else:
-                log.warn("Unrecognized http_method type in -- config -- block: {0}".format(value.lower()))
+                log.warn(
+                    "Unrecognized http_method type in -- config -- block: {0}".format(value.lower()))
                 continue
-            if value.lower() in ['split','combined']:
+            if value.lower() in ['split', 'combined']:
                 output = value.lower()
                 continue
             else:
-                log.warn("Unrecognized output type in -- config -- block: {0}".format(value.lower()))
+                log.warn(
+                    "Unrecognized output type in -- config -- block: {0}".format(value.lower()))
                 continue
-        
+
         # param
         if in_block and key == "param":
             # handle the optional description
@@ -288,13 +293,14 @@ def create_script(script_name, filename):
                 name, desc = [item.strip() for item in value.split('-')]
                 params.append({'name': name, 'description': desc})
                 continue
-            
+
             params.append({'name': value})
             continue
 
         # filtered_params
         if in_block and key == "filtered_params":
-            filter_values = [filter_value.strip() for filter_value in value.split(',')]
+            filter_values = [filter_value.strip()
+                             for filter_value in value.split(',')]
             if len(filter_values) > 1:
                 for filter_value in filter_values:
                     filtered_params.append(filter_value)
@@ -313,7 +319,7 @@ def create_script(script_name, filename):
 
             tags.append(value)
             continue
-        
+
         # lock
         if in_block and key == "lock":
             lock = (value == "True")
@@ -328,10 +334,11 @@ def create_script(script_name, filename):
             continue
 
         log.warn("Unrecognized line in -- config -- block: {0}".format(line))
-    
+
     # if in_bock is true, then we never got an end to the block, which is bad
     if in_block:
-        log.error("File with filename {0} missing a -- config -- end block, ignoring".format(filename))
+        log.error(
+            "File with filename {0} missing a -- config -- end block, ignoring".format(filename))
         return None
-    
-    return Script(filename, script_name, description, params, filtered_params, tags, http_method, output, lock)
+
+    return Extension(filename, extension_name, description, params, filtered_params, tags, http_method, output, lock)

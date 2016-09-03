@@ -61,12 +61,12 @@ def load_extensions(options):
     LOAD the extensions
     """
     sudo_warning()
-    if os.path.isdir("/srv/pyjojo"):
-        print("Deleting /srv/pyjojo")
-        shutil.rmtree("/srv/pyjojo")
-    print("Installing extensions to /srv/pyjojo")
-    shutil.copytree("./srv/blueprints", ("/srv/pyjojo"))
-    chmod_dash_r("/srv/pyjojo", 0755)
+    if os.path.isdir("/srv/extensions"):
+        print("Deleting /srv/extensions")
+        shutil.rmtree("/srv/extensions")
+    print("Installing extensions to /srv/extensions")
+    shutil.copytree("./srv/extensions", ("/srv/extensions"))
+    chmod_dash_r("/srv/extensions", 0755)
 
 @task
 @needs('load_extensions')
@@ -86,7 +86,7 @@ def start():
     START a local dev instance for testing
     """
     sudo_warning()
-    sh('opsapi --dir=/srv/pyjojo')
+    sh('opsapi --dir=/srv/extensions')
 
 @task
 def make_rpm():
