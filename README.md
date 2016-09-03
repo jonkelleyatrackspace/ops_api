@@ -4,30 +4,38 @@ Expose the routes directory as simple extensible automation scripts
 
 Use the apache htpasswd utility to create your htpasswd files.
 
+## Quick dev environment
+
+Start up opsapi and hit it with curl:
+
+    opsapi -d --dir /srv/pyjojo
+    curl -XPOST http://localhost:3000/scripts/echo -H "Content-Type: application/json" -d '{"text": "hello world!"}'
+
+
 ## Tutorial
 
-Start up pyJoJo and hit it with curl:
+Start up opsapi and hit it with curl:
 
-    pyjojo -d --dir /srv/pyjojo
+    opsapi -d --dir /srv/pyjojo
     curl -XPOST http://localhost:3000/scripts/echo -H "Content-Type: application/json" -d '{"text": "hello world!"}'
 
 You should see this as a response:
 
     {
-      "retcode": 0,
-      "return_values": {
+      "status": 0,
+      "values": {
           "age": "99", 
           "name": "bob"
       },
-      "stderr": [],
-      "stdout": [
+      "err": [],
+      "out": [
           "echo'd text: hello world!"
       ]
     }
 
 ## Usage
 
-    Usage: pyjojo [options] <htpasswd>
+    Usage: opsapi [options] <htpasswd>
 
     Expose a directory of bash scripts as an API.
 
@@ -51,13 +59,13 @@ You should see this as a response:
       -k KEYFILE, --keyfile=KEYFILE
                             SSL Private Key File
       -u UNIX_SOCKET, --unix-socket=UNIX_SOCKET
-                            Bind pyjojo to a unix domain socket
+                            Bind opsapi to a unix domain socket
 
 ## API
 
 ### JoJo Block Markup
 
-JoJo blocks are metadata about the script that pyJoJo will use to execute it.  JoJo blocks are not mandatory for the script to run.
+JoJo blocks are metadata about the script that opsapi will use to execute it.  JoJo blocks are not mandatory for the script to run.
 
 Example block:
 
@@ -80,7 +88,7 @@ Fields:
     - format: param: *name* [- *description*]
   - **filtered_params**: specifies a list of parameters that you have already specified, but want to ensure that the values are not logged.
     - format: filtered_params: item1 [,item2]
-  - **tags**: specifies a list of tags that you want displayed when querying pyjojo about scripts.
+  - **tags**: specifies a list of tags that you want displayed when querying opsapi about scripts.
     - format: tags: item1 [,item2]
   - **http_method**: specifies the http method the script should respond to.
     - format: http_method: get
