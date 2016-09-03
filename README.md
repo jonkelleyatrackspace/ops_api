@@ -1,36 +1,29 @@
 # opsAPI
 
-Expose directory routes with a simple Python SDK and API
-Use the apache htpasswd utility to create your htpasswd files.
+Lightweight API framework with simple extension SDK to allow rapid prototype of infrastructure-as-a-service concepts.
+
+Use the apache htpasswd utility (from `apache2-utils` or `httpd-tools`), to create your htpasswd files.
 
 ## Quick dev environment
 
 You will need to `pip install paver` first.
 
-Install the cloned opsapi source with paver:
+You can then leverage the following paver commands like a make/rake task:
 
-    paver setup
-
-Start a local dev server:
-
-    paver start
-
-Start copy extensions from local git clone to /srv/:
-
-    paver load_extensions
-
-Build RPM artefact:
-
-    paver build_rpm
+    paver setup           - Copy, Install & configure the components for running a local server (sudo)
+    paver start           - Install & configure git repo to system and start local dev instance (sudo)
+    paver load_extensions - Copy the git repo extensions to /srv/extensions (sudo)
+    paver build_rpm       - Build an RPM artefact
+    paver clean           - Clean up paver/build/artefacts so you can do git stuff
 
 ## Tutorial
 
-Start up opsapi and hit it with curl:
+After installing with paver, start the API and perform a test request:
 
     opsapi -d --dir /srv/extensions
-    curl -XPOST http://localhost:3000/extensions/test -H "Content-Type: application/json" -d '{ "name": "bob", "age": "31"}''{"text": "hello world!"}'
+    curl -XPOST http://localhost:3000/extensions/test -H "Content-Type: application/json" -d '{ "name": "bob", "age": "31"}'
 
-You should see this as a response:
+You should see this response:
 
     {
         "debug": {
@@ -51,21 +44,29 @@ You should see this as a response:
 
     This will expose a set of opsapi extensions as a REST API.
 
+    Note: Please make sure this application is behind authentication for security.
+    Please use the SSL config options, give a passwd file, and either whitelist
+    access to the API via firewall or keep it on a privately routed network.
+
+    Use the apache htpasswd utility to create your htpasswd files.
+
     Options:
       -h, --help            show this help message and exit
-      -d, --debug           Start the application in debugging mode.
-      --dir=DIRECTORY       Base directory to parse the extensions out of
-      --force-json          Treats all calls as if they sent the 'Content-Type: application/json' header.  May produce unexpected results
-      -p PORT, --port=PORT  Set the port to listen to on startup.
+      -d, --debug           Start the application with debug enabled.
+      --dir=DIRECTORY       Directory to load SDK extensions from
+      --force-json          Force the application to treat all incoming requests
+                            as 'Content-Type: application/json'
+      -p PORT, --port=PORT  The listening port
       -a ADDRESS, --address=ADDRESS
-                            Set the address to listen to on startup. Can be a
-                            hostname or an IPv4/v6 address.
+                            Listening interface. Can be a hostname or an IPv4/v6
+                            address.
       -c CERTFILE, --certfile=CERTFILE
-                            SSL Certificate File
+                            SSL Cert File
       -k KEYFILE, --keyfile=KEYFILE
                             SSL Private Key File
       -u UNIX_SOCKET, --unix-socket=UNIX_SOCKET
                             Bind opsapi to a unix domain socket
+
 
 ## API
 
@@ -104,7 +105,7 @@ Fields:
     - format: output: combined
     - allowed_values: split|combined
     - default: split
-  - **lock**: if true, only one instance of the extension will be allowed to run
+  - **lock**: if true, only one instance of the extension will be allowed to run. useful to prevent RACE conditions if your code cannot support parallelism 
     - format: lock: True
     - default: False
     
@@ -140,18 +141,18 @@ Optional Tag Query Parameters:
 
 ### Get Information about an extension
 
-Returns information about the specified extension.
+This will return the help parameters, description, and other data about an extension.
 
     OPTIONS /extensions/{extension_name}
 
 ### Run a extension
 
-Executes the specified extension and returns the results.
+You would execute POST data to an extension and return results with
 
     POST /extensions/{extension_name}
 
 ### Reload the extension directories
 
-Reloads the extensions in the extension directory.
+This request will reload updates to code in the extensions
 
     POST /reload

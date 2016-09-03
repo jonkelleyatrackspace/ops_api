@@ -21,7 +21,7 @@ setup(
     version="0.3",
     author="Jonathan Kelley",
     author_email="jonkelley@gmail.com",
-    description="Extensible operations API and SDK blueprint examples",
+    description="Lightweight API framework with simple extension SDK to allow rapid prototype of infrastructure-as-a-service concepts.",
     url="https://github.com/jonkelleyatrackspace/ops_api",
     packages=['opsapi'],
     install_requires=install_requires,
