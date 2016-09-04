@@ -1,4 +1,4 @@
-# opsapi
+# opsApi
 
 OpsAPI is a lightweight API/HTTP framework in Tornado which allows users to extend and prototype infrastructure-as-a-service designs in hours not weeks!
 
