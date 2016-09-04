@@ -14,11 +14,9 @@
 
 import copy
 import logging
-
 import yaml
 
 log = logging.getLogger(__name__)
-
 
 class Config(dict):
     """ Configuration dictionary """
@@ -27,11 +25,13 @@ class Config(dict):
         dict.__init__(self, *args, **kwargs)
 
     def load_file(self, file_name):
+        log.info("loading config singleton from file {n}".format(n=file_name))
         data = yaml.load(open(file_name, 'r'))
 
         if not isinstance(data, dict):
             raise Exception("config file not parsed correctly")
 
+        log.info("objects in config {objs}".format(objs=data))
         deep_merge(self, data)
 
 

@@ -215,6 +215,10 @@ NOTE: You can use the apache htpasswd utility (from `apache2-utils` or `httpd-to
       --dir=DIRECTORY       Directory to load SDK extensions from
       --force-json          Force the application to treat all incoming requests
                             as 'Content-Type: application/json'
+      --config              Provide a YAML file to load config options from.
+                            NOTE: Syntax is key: v; python objects allowed as values.
+                            Native YAML lists and hash syntax are unsupported.
+
       -p PORT, --port=PORT  The listening port
       -a ADDRESS, --address=ADDRESS
                             Listening interface. Can be a hostname or an IPv4/v6
@@ -226,6 +230,21 @@ NOTE: You can use the apache htpasswd utility (from `apache2-utils` or `httpd-to
       -u UNIX_SOCKET, --unix-socket=UNIX_SOCKET
                             Bind opsapi to a unix domain socket
 
+## Configuration File Support
+
+Some features may require additional configuration.
+
+This API can support YAML configuration files from some usual locations or with the --config startup parameter, if you want to get fancy. The aggregated configurations are merged into a running configuration.  NOTE: Syntax is key: v. Only python objects allowed as values. Native YAML lists and hash syntax are unsupported!
+
+The default configuration paths (automatic loading) are:
+
+* `/etc/opsapi.{yaml,yml}`
+* `./opsapi.{yaml,yml}`
+* `/etc/opsapi/opsapi.{yaml,yml}`
+* `~/opsapi.{yaml,yml}`
+
+The default configuration and options are documented in this git repository under `opsapi.yaml`
+Command Line Usage
 
 ## API
 
