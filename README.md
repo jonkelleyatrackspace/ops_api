@@ -175,7 +175,8 @@ Do I want to CREATE a role or DROP the postgres role?
 
     curl -XPOST http://localhost:3000/extensions/psql_create_role -H "Content-Type: application/json" -d '{ "role": "jonkelley", "password": "SERVER'\''; DROP ROLE postgres;HACKED", "connection_limit": "3"}'
 
-The server will log and raise a SecurityFaultDangerousUserInput value: "SERVER'; DROP ROLE postgres;HACKED"
+This request is audited by a log event `SecurityFaultDangerousUserInput value: "SERVER'; DROP ROLE postgres;HACKED"`
+
 You should see this response:
 
     {
