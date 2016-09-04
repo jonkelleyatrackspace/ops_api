@@ -60,10 +60,11 @@ birthyear =  dt.year - int(arguement['age'])
 print(("{status} current_datetime={datetime}\n"
   "{status} name={whom}\n"
   "{status} age={age}\n"
-  "{status} status=You were born in {year}").format(
+  "{status} status={u} was born in {year}").format(
   status=Constants.API_RETURN_STRING,
   age=arguement['age'],
   whom=arguement['name'],
+  u=arguement['name'].title(),
   year=birthyear,
   datetime=dt))
 
