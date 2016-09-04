@@ -18,6 +18,10 @@ import yaml
 
 log = logging.getLogger(__name__)
 
+# Contains default mappings before yaml loads
+default_mappings = {}
+default_mappings['disable_debug_console'] = False
+
 class Config(dict):
     """ Configuration dictionary """
 

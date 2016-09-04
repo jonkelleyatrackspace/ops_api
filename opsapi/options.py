@@ -15,8 +15,9 @@
 from optparse import OptionParser, IndentedHelpFormatter
 
 from opsapi.config import config
+from opsapi.config import default_mappings as config_defaults
 
-def load_config_from_disk(bonus_search_path):
+def load_config_from_disk(bonus_search_path=None):
     """
     loads the default config locations into a merged config dictionary
     also slurps in the --config custom file path in case the user wants to 
@@ -91,7 +92,10 @@ Use the apache htpasswd utility to create your htpasswd files."""
 
     config['directory'] = options.directory
     config['force_json'] = options.force_json
-    config['disable_debug_console'] = False
+
+    for k, v in config_defaults.iteritems():
+      config[k] = v # set defaults
+
     load_config_from_disk(options.config_file)
 
     return options

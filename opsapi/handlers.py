@@ -24,9 +24,10 @@ from passlib.apache import HtpasswdFile
 from tornado import gen
 from tornado.web import RequestHandler, HTTPError, asynchronous
 
-from opsapi.config import config
+from opsapi.config import config, default_mappings
 from opsapi.extensions import create_collection
 from opsapi.util import route
+from opsapi.options import load_config_from_disk
 
 log = logging.getLogger(__name__)
 
@@ -396,4 +397,8 @@ class ReloadHandler(BaseHandler):
     def post(self):
         """ reload the extensions from the extensions directory """
         self.settings['extensions'] = create_collection(config['directory'])
+        """ reload the local configuration files """
+        for k,v in default_mappings.iteritems():
+            config[k] = v # reset defaults
+        load_config_from_disk()
         self.finish({"status": "ok"})
