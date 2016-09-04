@@ -3,35 +3,35 @@ PACKAGE := $(shell basename *.spec .spec)
 PAVER := $(shell which paver)
 
 install:
-	${PAVER} setup
+	sudo ${PAVER} setup
 
 reinstall:
-	${PAVER} reinstall
+	sudo ${PAVER} reinstall
 
 uninstall:
-	${PAVER} uninstall
+	sudo ${PAVER} uninstall
 
 clean:
 	${PAVER} clean
 
 extensions:
-	${PAVER} load_extensions
+	sudo ${PAVER} load_extensions
 
 rpms:
 	${PAVER} make_rpm
 
 install_rpms:
-	${PAVER} install_rpms
+	sudo ${PAVER} install_rpms
 
 uninstall_rpms:
-	${PAVER} uninstall_rpms
+	sudo ${PAVER} uninstall_rpms
 
 debs:
 	${PAVER} make_deb
 
 uninstall_debs:
-	${PAVER} uninstall_debs
+	sudo ${PAVER} uninstall_debs
 
 start:
-	${PAVER} start
+	sudo ${PAVER} start
 
