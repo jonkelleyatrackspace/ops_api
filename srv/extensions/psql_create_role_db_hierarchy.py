@@ -182,6 +182,7 @@ error_scenario_2 = False
 error_scenario_3 = False
 error_scenario_4 = False
 error_scenario_5 = False
+error_scenario_6 = False
 
 # Parse Output
 for line in output.split(linesep):
@@ -205,6 +206,10 @@ for line in output.split(linesep):
         toolkit.print_stderr(line)
         error_scenario_5 = True
         exitcode = 1  # Parse Errors should flag an API error code.
+    if "syntax error" in line and "ERROR" in line:
+        toolkit.print_stderr(line)
+        error_scenario_6 = True
+        exitcode = 1  # Parse Errors should flag an API error code.
 
 # Report Output
 if exitcode == 0:
@@ -222,6 +227,8 @@ else:
     if error_scenario_4:
         error_hint.append('SQL_ERROR')
     if error_scenario_5:
+        error_hint.append('FATAL_ERROR')
+    if error_scenario_6:
         error_hint.append('FATAL_ERROR')
     if len(error_hint) == 0:
         error_hint = ['UNKNOWN']

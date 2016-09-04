@@ -136,7 +136,7 @@ class Extension(object):
             self.filename, self.filter_params(params)))
 
         if self.needs_lock:
-            with (yield gen.Task(self.lock.aquire)):
+            with (yield gen.Task(self.lock.aquire(self.lock))):
                 response = yield gen.Task(self.do_execute, params)
         else:
             response = yield gen.Task(self.do_execute, params)

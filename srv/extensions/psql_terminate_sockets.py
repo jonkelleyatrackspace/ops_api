@@ -135,6 +135,7 @@ error_scenario_1 = False
 error_scenario_2 = False
 error_scenario_3 = False
 error_scenario_4 = False
+error_scenario_5 = False
 
 # Process result
 for line in output.split(linesep):
@@ -162,6 +163,11 @@ for line in output.split(linesep):
         toolkit.print_stderr(line)
         error_scenario_4 = True
         exitcode = 1  # Parse Errors should flag an API error code.
+    if "syntax error" in line and "ERROR" in line:
+        toolkit.print_stderr(line)
+        error_scenario_5 = True
+        exitcode = 1  # Parse Errors should flag an API error code.
+
 # Report Output
 if exitcode == 0:
     # We good
@@ -177,6 +183,8 @@ else:
         error_hint.append('CLIENT_SOCKET_WAS_TERMINATED')
     if error_scenario_4:
         error_hint.append('FATAL_ERROR')
+    if error_scenario_5:
+        error_hint.append('SYNTAX_ERROR')
     if len(error_hint) == 0:
         error_hint = ['UNKNOWN']
     print("{status}=rollback".format(status=Constants.API_SUMMARY_STRING))

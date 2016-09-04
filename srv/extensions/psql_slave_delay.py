@@ -48,6 +48,7 @@ exitcode = 0  # We good
 error_scenario_1 = False
 error_scenario_2 = False
 error_scenario_3 = False
+error_scenario_4 = False
 delay = "-NaN"
 
 # Match the format of  -00:00:00.000549
@@ -65,6 +66,10 @@ for line in query_result.split(linesep):
     if " FATAL: " in line:
         toolkit.print_stderr(line)
         error_scenario_2 = True
+        exitcode = 1  # Parse Errors should flag an API error code.
+    if "syntax error" in line and "ERROR" in line:
+        toolkit.print_stderr(line)
+        error_scenario_4 = True
         exitcode = 1  # Parse Errors should flag an API error code.
 
 if delay != "-NaN":
@@ -95,6 +100,8 @@ else:
         error_hint.append('FATAL_ERROR')
     if error_scenario_3:
         error_hint.append('REPLICA_DELAY_SELECT_WAS_EMPTY')
+    if error_scenario_4:
+        error_hint.append('SYNTAX_ERROR')
     if len(error_hint) == 0:
         error_hint = ['UNKNOWN']
     print("{status}=rollback".format(status=Constants.API_SUMMARY_STRING))

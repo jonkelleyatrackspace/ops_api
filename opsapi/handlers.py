@@ -12,6 +12,7 @@
 # subject to the above copyright notice and this permission notice shall being included
 # in all copies or substantial portions of the Software.
 
+from pygments.styles import
 from pygments import highlight, lexers, formatters
 import logging
 import httplib
