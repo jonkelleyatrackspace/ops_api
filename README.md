@@ -10,9 +10,9 @@ A simple SDK is exposed to the extensions to make prototyping additional product
 
 ## Quick dev environment
 
-You will need to `pip install paver` first.
+You will need to `pip install paver` first, then just type `make`!
 
-You can then leverage the following paver commands like a make/rake task:
+These other paver tasks are available to you.
 
     paver setup           - Copy, Install & configure the components for running a local server (sudo)
     paver start           - Install & configure git repo to system and start local dev instance (sudo)
