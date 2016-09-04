@@ -1,0 +1,5 @@
+---
+# disable_debug_console: False
+# --
+# This will disable the API JSON contract that matches the following:
+# { "debug": { "err": "", "out", "" }} when the value is set to True
