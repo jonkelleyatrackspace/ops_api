@@ -88,11 +88,44 @@ def start():
     sudo_warning()
     sh('opsapi --dir=/srv/extensions')
 
+
+@task
+def prep_rpmbuild():
+    print("TODO")
+
 @task
 def make_rpm():
     """
     Builds RPM from the local .spec file.
     """
+    print("TODO")
+
+@task
+def install_rpms():
+    print("TODO")
+
+@task
+def reinstall():
+    print("TODO")
+
+@task
+def uninstall():
+    print("TODO")
+
+@task
+def uninstall_rpms():
+    print("TODO")
+
+@task
+def prep_debbuild():
+    print("TODO")
+
+@task
+def make_deb():
+    print("TODO")
+
+@task
+def uninstall_debs():
     print("TODO")
 
 @task
