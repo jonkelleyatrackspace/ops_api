@@ -23,7 +23,7 @@
 # http_method: post
 # lock: False
 # tags: Postgres, CREATEAPPTIER, Psql
-# -- config --
+# -- end config --
 
 from os import linesep
 from extension import Sanitize, CmdRun

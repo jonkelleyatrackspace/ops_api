@@ -49,7 +49,7 @@
 # param: ask_become_pass -  When true, ask for privilege escalation password
 # http_method: post
 # lock: False
-# -- config --
+# -- end config --
 
 from os import linesep
 from extension import Sanitize, CmdRun

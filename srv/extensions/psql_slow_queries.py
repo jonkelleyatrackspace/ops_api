@@ -16,7 +16,7 @@
 # http_method: get
 # lock: False
 # tags: Postgres, Psql
-# -- config --
+# -- end config --
 
 from os import linesep
 from extension import CmdRun, ToolKit, Constants

@@ -16,7 +16,7 @@
 # param: package - The package to retrieve the information about
 # http_method: post
 # lock: False
-# -- config --
+# -- end config --
 
 from extension import CmdRun, Constants
 from extension import ParamHandle as Param

@@ -16,7 +16,7 @@
 # http_method: get
 # lock: False
 # tags: Postgres, PGaaS, cit-ops
-# -- config --
+# -- end config --
 
 from extension import ToolKit, CmdRun, Constants
 

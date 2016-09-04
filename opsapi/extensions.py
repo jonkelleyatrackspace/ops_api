@@ -26,6 +26,7 @@ import toro
 
 log = logging.getLogger(__name__)
 
+
 class SecurityFaultDangerousUserInput(Exception):
     """ this will be raised if an escape sequence is attempted in parameters 
         if you try to pull tricks, the json parser errors expecting a delimiter
@@ -43,9 +44,11 @@ class SecurityFaultDangerousUserInput(Exception):
         as always, use a reasonable layer of authentication in front of this
         API as absolutely no security measure is close to foolproof.
     """
-    def __init___(self,dErrorArguments):
-        Exception.__init__(self,"{0}".format(dErrArguments))
+
+    def __init___(self, dErrorArguments):
+        Exception.__init__(self, "{0}".format(dErrArguments))
         self.dErrorArguments = dErrorArguements
+
 
 class ExtensionCollection(dict):
     """ load the collection of extensions """
@@ -293,7 +296,8 @@ def create_extension(extension_name, filename):
             continue
 
         # end of the extension block, so we'll stop here
-        if in_block and line.startswith("-- config --"):
+        if in_block and line.startswith("-- config --") \
+                or in_block and line.startswith("-- end config --"):
             in_block = False
             break
 

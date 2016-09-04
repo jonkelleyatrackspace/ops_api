@@ -17,7 +17,7 @@
 # param: age - Your age
 # http_method: post
 # lock: False
-# -- config --
+# -- end config --
 
 from extension import Constants
 from extension import ParamHandle as Param
