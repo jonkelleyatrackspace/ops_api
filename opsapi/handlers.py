@@ -110,17 +110,18 @@ class BaseHandler(RequestHandler):
             # TODO: What should go here?
             message = ''
 
-        self.write({
-            'debug': {
+        body_struct = {}
+        if config['disable_debug_console'] == True:
+            body_struct['debug'] = {
                 'err': [httplib.responses[status_code]],
                 'out': ['']
-            },
-            'request': {
+            }
+        body_struct['request'] = {
                 'status': status_code,
                 'errors': message,
                 'status': "500 Internal Server Error"
             }
-        })
+        self.write(body_struct)
 
 @route(r"/extension_names/?")
 class ExtensionNamesCollectionHandler(BaseHandler):
@@ -189,11 +190,16 @@ class ExtensionDetailsHandler(BaseHandler):
             # Merge the above two dicts
             job_results = return_stat.copy()
             job_results.update(return_vals)
-            self.finish({
-                "debug": {
-                    "out": self.filter_return_values(stdout)
-                },
-                "request": job_results
+
+            body_struct = {}
+            if config['disable_debug_console'] == True:
+                body_struct['debug'] = {
+                    'out': self.filter_return_values(stdout)
+                }
+            body_struct['request'] = {
+                    'request': job_results
+                }
+            self.finish(body_struct)
             })
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
@@ -201,13 +207,17 @@ class ExtensionDetailsHandler(BaseHandler):
             return_stat = {"status": retcode}
             job_results = return_stat.copy()
             job_results.update(return_vals)
-            self.finish({
-                "debug": {
-                    "out": self.filter_return_values(stdout),
-                    "err": self.filter_return_values(stderr)
-                },
-                "request": job_results
-            })
+
+            body_struct = {}
+            if config['disable_debug_console'] == True:
+                body_struct['debug'] = {
+                    'out': self.filter_return_values(stdout),
+                    'out':self.filter_return_values(stderr)
+                }
+            body_struct['request'] = {
+                    'request': job_results
+                }
+            self.finish(body_struct)
     @asynchronous
     @gen.engine
     def delete(self, extension_name):
@@ -224,25 +234,34 @@ class ExtensionDetailsHandler(BaseHandler):
             return_stat = {"status": retcode}
             job_results = return_stat.copy()
             job_results.update(return_vals)
-            self.finish({
-                "debug": {
-                    "out": self.filter_return_values(stdout)
-                },
-                "request": job_results
-            })
+
+            body_struct = {}
+            if config['disable_debug_console'] == True:
+                body_struct['debug'] = {
+                    'out': self.filter_return_values(stdout)
+                }
+            body_struct['request'] = {
+                    'request': job_results
+                }
+            self.finish(body_struct)
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
             return_vals = self.find_return_values(stdout)
             return_stat = {"status": retcode}
             job_results = return_stat.copy()
             job_results.update(return_vals)
-            self.finish({
-                "debug": {
-                    "out": self.filter_return_values(stdout),
-                    "err": self.filter_return_values(stderr)
-                },
-                "request": job_results
-            })
+
+            body_struct = {}
+            if config['disable_debug_console'] == True:
+                body_struct['debug'] = {
+                    'out': self.filter_return_values(stdout),
+                    'err': self.filter_return_values(stderr)
+                }
+            body_struct['request'] = {
+                    'request': job_results
+                }
+            self.finish(body_struct)
+
     @asynchronous
     @gen.engine
     def put(self, extension_name):
@@ -259,25 +278,33 @@ class ExtensionDetailsHandler(BaseHandler):
             return_stat = {"status": retcode}
             job_results = return_stat.copy()
             job_results.update(return_vals)
-            self.finish({
-                "debug": {
-                    "out": self.filter_return_values(stdout)
-                },
-                "request": job_results
-            })
+
+            body_struct = {}
+            if config['disable_debug_console'] == True:
+                body_struct['debug'] = {
+                    'out': self.filter_return_values(stdout)
+                }
+            body_struct['request'] = {
+                    'request': job_results
+                }
+            self.finish(body_struct)
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
             return_vals = self.find_return_values(stdout)
             return_stat = {"status": retcode}
             job_results = return_stat.copy()
             job_results.update(return_vals)
-            self.finish({
-                "debug": {
-                    "out": self.filter_return_values(stdout),
-                    "err": self.filter_return_values(stderr)
-                },
-                "request": job_results
-            })
+
+            body_struct = {}
+            if config['disable_debug_console'] == True:
+                body_struct['debug'] = {
+                    'out': self.filter_return_values(stdout),
+                    'err': self.filter_return_values(stderr)
+                }
+            body_struct['request'] = {
+                    'request': job_results
+                }
+            self.finish(body_struct)
 
     @asynchronous
     @gen.engine
@@ -295,25 +322,33 @@ class ExtensionDetailsHandler(BaseHandler):
             return_stat = {"status": retcode}
             job_results = return_stat.copy()
             job_results.update(return_vals)
-            self.finish({
-                "debug": {
-                    "out": self.filter_return_values(stdout),
-                },
-                "request": job_results
-            })
+
+            body_struct = {}
+            if config['disable_debug_console'] == True:
+                body_struct['debug'] = {
+                    'out': self.filter_return_values(stdout)
+                }
+            body_struct['request'] = {
+                    'request': job_results
+                }
+            self.finish(body_struct)
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
             return_vals = self.find_return_values(stdout)
             return_stat = {"status": retcode}
             job_results = return_stat.copy()
             job_results.update(return_vals)
-            self.finish({
-                "debug": {
-                    "out": self.filter_return_values(stdout),
-                    "err": self.filter_return_values(stderr)
-                },
-                "request": job_results
-            })
+
+            body_struct = {}
+            if config['disable_debug_console'] == True:
+                body_struct['debug'] = {
+                    'out': self.filter_return_values(stdout),
+                    'err': self.filter_return_values(stderr)
+                }
+            body_struct['request'] = {
+                    'request': job_results
+                }
+            self.finish(body_struct)
 
     def get_extension(self, extension_name, http_method):
         extension = self.settings['extensions'].get(extension_name, None)

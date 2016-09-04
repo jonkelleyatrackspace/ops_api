@@ -91,6 +91,7 @@ Use the apache htpasswd utility to create your htpasswd files."""
 
     config['directory'] = options.directory
     config['force_json'] = options.force_json
+    config['disable_debug_console'] = False
     load_config_from_disk(options.config_file)
 
     return options
