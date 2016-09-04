@@ -9,6 +9,27 @@ from paver.setuputils import setup
 import shutil
 import os
 
+def load_kv_from_spec(getkey):
+    """
+    nonregistered helper that loads the version from the .spec file
+    which shall be our source of truth for versioning.
+
+    i looked into using rpm, but the library is really really unwieldy
+    not an external api, and looks like it's likely to change
+    """
+    spec = {}
+    with open("opsapi.spec", "r") as f:
+        for line in f.readlines():
+            try:
+                value = line.split(":")[1].lstrip()
+                key = line.split(":")[0].lstrip().lower()
+                print("X"+str(key))
+                spec[key] = value
+            except:
+                pass
+        print(spec)
+        return spec[getkey]
+
 __doc__ = """ Setuptools with paver """
 install_requires = [
     'pyyaml==3.10',
@@ -18,7 +39,7 @@ install_requires = [
 ]
 setup(
     name="opsapi",
-    version="0.3",
+    version=load_kv_from_spec('version'),
     author="Jonathan Kelley",
     author_email="jonkelley@gmail.com",
     description="Lightweight API framework with simple extension SDK to allow rapid prototype of infrastructure-as-a-service concepts.",

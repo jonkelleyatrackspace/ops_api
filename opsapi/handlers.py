@@ -115,12 +115,12 @@ class BaseHandler(RequestHandler):
         body_struct = {}
         if config['disable_debug_console'] == False:
             body_struct['debug'] = {
-                'err': [httplib.responses[status_code]],
-                'out': ['']
+                'err': message,
+                'out': [-1]
             }
         body_struct['request'] = {
                 'status': status_code,
-                'troubleshoot': message,
+                'troubleshoot': [httplib.responses[status_code].upper().replace(" ", "_")],
                 'status': "500 Internal Server Error"
             }
         if config['output_highlighter']:

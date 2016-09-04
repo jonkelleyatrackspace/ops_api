@@ -1,7 +1,7 @@
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           opsapi
-Version:        0.0.1
+Version:        1.0.0
 Release:        1%{?dist}
 Group:          Applications/Systems
 Summary:        Lightweight API framework with simple extension SDK
@@ -55,4 +55,7 @@ mkdir -p %{buildroot}%{_localstatedir}/lib/%{name}
 
 %changelog
 * Sun Sep 4 2016 Jonathan Kelley <jon@jon-kelley.com> - 0.0.1-1
+- First spec
+
+* Sun Sep 4 2016 Jonathan Kelley <jon@jon-kelley.com> - 1.0.0-1
 - First spec
