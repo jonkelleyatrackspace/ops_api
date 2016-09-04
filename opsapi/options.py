@@ -17,11 +17,11 @@ from optparse import OptionParser, IndentedHelpFormatter
 from opsapi.config import config
 
 def load_config_from_disk(bonus_search_path):
-  """
-  loads the default config locations into a merged config dictionary
-  also slurps in the --config custom file path in case the user wants to 
-  get fancy
-  """
+    """
+    loads the default config locations into a merged config dictionary
+    also slurps in the --config custom file path in case the user wants to 
+    get fancy
+    """
     usual_suspects = ["/etc/opsapi", "./opsapi", "/etc/opsapi/opsapi", "~/opsapi"]
     if bonus_search_path:
       usual_suspects.append(bonus_search_path)
