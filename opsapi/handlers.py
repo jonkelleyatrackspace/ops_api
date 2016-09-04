@@ -200,7 +200,6 @@ class ExtensionDetailsHandler(BaseHandler):
                     'request': job_results
                 }
             self.finish(body_struct)
-            })
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
             return_vals = self.find_return_values(stdout)
