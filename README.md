@@ -246,11 +246,11 @@ The default configuration paths (automatic loading) are:
 The default configuration and options are documented in this git repository under `opsapi.yaml`
 Command Line Usage
 
-## API
+## API for Extensions
 
 ### Configuration Block Markup
 
-Config blocks are metadata about the extension that opsapi will use to execute it.  Config blocks are not mandatory for the extension to run.
+Config blocks help build metadata about the extension that opsapi is loading into memory.  Config blocks are not mandatory for the extension to run (only if you reference params).
 
 Example block:
 
@@ -263,7 +263,7 @@ Example block:
     # tags: test, staging
     # http_method: get
     # lock: False
-    # -- config -- 
+    # -- end config -- 
 
 Fields:
 

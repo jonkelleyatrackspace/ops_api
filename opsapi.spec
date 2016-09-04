@@ -58,4 +58,4 @@ mkdir -p %{buildroot}%{_localstatedir}/lib/%{name}
 - First spec
 
 * Sun Sep 4 2016 Jonathan Kelley <jon@jon-kelley.com> - 1.0.0-1
-- First spec
+- Look for CHANGES.md included with this release.
