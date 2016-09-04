@@ -150,7 +150,7 @@ class Constants():
     # These are the api status output keys
     API_RETURN_STRING = "return_value"
     API_SUMMARY_STRING = "{v} result".format(v=API_RETURN_STRING)
-    API_ERROR_STRING = "{v} errors".format(v=API_RETURN_STRING)
+    API_ERROR_STRING = "{v} troubleshoot".format(v=API_RETURN_STRING)
 
     # Postgres uses  no more than  NAMEDATALEN-1 bytes
     # of an  identifier;  longer names can be written in
