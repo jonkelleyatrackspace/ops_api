@@ -1,4 +1,3 @@
-#SERIAL 201601291542
 # Base the name of the software on the spec file
 PACKAGE := $(shell basename *.spec .spec)
 PAVER := $(shell which paver)
@@ -15,10 +14,10 @@ uninstall:
 clean:
 	${PAVER} clean
 
-load_extensions:
+extensions:
 	${PAVER} load_extensions
 
-make_rpms:
+rpms:
 	${PAVER} make_rpm
 
 install_rpms:
@@ -27,7 +26,7 @@ install_rpms:
 uninstall_rpms:
 	${PAVER} uninstall_rpms
 
-make_debs:
+debs:
 	${PAVER} make_deb
 
 uninstall_debs:
