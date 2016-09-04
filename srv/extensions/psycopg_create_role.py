@@ -25,6 +25,7 @@
 # param: encrypted - If bool set, Toggle UNENCRYPTED else ENCRYPTED
 # param: rolename - Which role (only one currently) to add to
 # param: groupname -  Which group (only one currently) to add to
+# filtered_params: password
 # http_method: post
 # lock: False
 # tags: Postgres, CREATEROLE, Psql

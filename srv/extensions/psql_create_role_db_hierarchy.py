@@ -20,6 +20,7 @@
 # param: svc_login - If the svc account has login permission
 # param: svc_maxsock - Svc account maximum sockets
 # param: svc_password - Svc account password
+# filtered_params: super_password, svc_password
 # http_method: post
 # lock: False
 # tags: Postgres, CREATEAPPTIER, Psql
