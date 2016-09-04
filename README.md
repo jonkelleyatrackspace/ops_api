@@ -1,12 +1,8 @@
 # opsAPI
 
-Lightweight API framework with simple extension SDK to allow rapid prototype of fairly complex infrastructure-as-a-service concepts.
+OpsAPI is a lightweight API/HTTP framework in Tornado which allows users to extend and prototype infrastructure-as-a-service designs in hours not weeks!
 
-## How it works
-
-The opsapi framework fully manages the abstraction of REST/HTTP through Tornado. This gives you the ability to focus on your task - delivering a service API. This project was built for systems engineers and developers who need to automate orchestration of tasks on a system and can appreciate the speed and convienence of a stateless API. You can automate anything with the built in extensions for subprocess, fabric, ansible, postgres, mysql or memcache.
-
-A simple SDK is exposed to the extensions to make prototyping additional products and services a simple task. Your imagination is your prototypes limit. Just write something in [marmelab/ng-admin](https://github.com/marmelab/ng-admin) and your mom can trigger garbage collection on that Tomcat Pool! She probably shouldn't.
+This project was built for systems engineers and developers who need to automate orchestration of tasks on a system and can appreciate the speed and convienence of a stateless API. You can automate anything with the built in extensions for subprocess, fabric, ansible, postgres, mysql or memcache.  Your imagination is your prototypes limit. Combined with a tool such as [marmelab/ng-admin](https://github.com/marmelab/ng-admin) for the browser and literally anyone could leverage the power of this toolset.
 
 ## Quick dev environment
 
