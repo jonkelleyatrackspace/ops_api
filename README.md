@@ -166,6 +166,33 @@ You should see this response:
         }
     }
 
+
+## Security Modeling
+
+The API has input string management classes to handle the possibility of bad-actor injection attempts. This API should never be exposed without authentication, but if you do then there are a few precautions to delay compromise.
+
+Do I want to CREATE a role or DROP the postgres role?
+
+    curl -XPOST http://localhost:3000/extensions/psql_create_role -H "Content-Type: application/json" -d '{ "role": "jonkelley", "password": "SERVER'\''; DROP ROLE postgres;HACKED", "connection_limit": "3"}'
+
+The server will log and raise a SecurityFaultDangerousUserInput value: "SERVER'; DROP ROLE postgres;HACKED"
+You should see this response:
+
+    {
+        "debug": {
+            "err": [
+                "Internal Server Error"
+            ],
+            "out": [
+                ""
+            ]
+        },
+        "request": {
+            "errors": "",
+            "status": "500 Internal Server Error"
+        }
+    }
+
 ## Command Line Usage
 
 NOTE: You can use the apache htpasswd utility (from `apache2-utils` or `httpd-tools`), to create your htpasswd files.
