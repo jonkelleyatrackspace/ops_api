@@ -232,15 +232,14 @@ Some features may require additional configuration.
 
 This API can support YAML configuration files from some usual locations or with the --config startup parameter, if you want to get fancy. The aggregated configurations are merged into a running configuration.  NOTE: Syntax is key: v. Only python objects allowed as values. Native YAML lists and hash syntax are unsupported!
 
-The default configuration paths (automatic loading) are:
+The a default config file sample is located in `opsapi.yaml` and will be used if you start `opsapi` from the git repository.
+
+The default load locations for configuration files are:
 
 * `/etc/opsapi.{yaml,yml}`
 * `./opsapi.{yaml,yml}`
 * `/etc/opsapi/opsapi.{yaml,yml}`
 * `~/opsapi.{yaml,yml}`
-
-The default configuration and options are documented in this git repository under `opsapi.yaml`
-Command Line Usage
 
 ## API for Extensions
 
