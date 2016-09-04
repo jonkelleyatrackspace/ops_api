@@ -3,3 +3,9 @@
 # --
 # This will disable the API JSON contract that matches the following:
 # { "debug": { "err": "", "out", "" }} when the value is set to True
+
+# output_highlighter: False
+# --
+# If set to True then all API JSON contractual output will be syntax
+# highlighted. This will need to be False if applications will be using
+# this API interface. Human-only interaction will raise 10 points in value.

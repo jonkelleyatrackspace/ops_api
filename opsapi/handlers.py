@@ -12,6 +12,7 @@
 # subject to the above copyright notice and this permission notice shall being included
 # in all copies or substantial portions of the Software.
 
+from pygments import highlight, lexers, formatters
 import logging
 import httplib
 import json
@@ -122,6 +123,12 @@ class BaseHandler(RequestHandler):
                 'errors': message,
                 'status': "500 Internal Server Error"
             }
+        if config['output_highlighter']:
+            body_struct = highlight(
+                unicode(json.dumps(body_struct,indent=5), 'UTF-8'),
+                lexers.guess_lexer(json.dumps(body_struct)),
+                formatters.TerminalFormatter()
+            )
         self.write(body_struct)
 
 @route(r"/extension_names/?")
@@ -198,6 +205,12 @@ class ExtensionDetailsHandler(BaseHandler):
                     'out': self.filter_return_values(stdout)
                 }
             body_struct['request'] = job_results
+            if config['output_highlighter']:
+                body_struct = highlight(
+                    unicode(json.dumps(body_struct,indent=5), 'UTF-8'),
+                    lexers.guess_lexer(json.dumps(body_struct)),
+                    formatters.TerminalFormatter()
+                )
             self.finish(body_struct)
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
@@ -213,6 +226,12 @@ class ExtensionDetailsHandler(BaseHandler):
                     'out':self.filter_return_values(stderr)
                 }
             body_struct['request'] = job_results
+            if config['output_highlighter']:
+                body_struct = highlight(
+                    unicode(json.dumps(body_struct,indent=5), 'UTF-8'),
+                    lexers.guess_lexer(json.dumps(body_struct)),
+                    formatters.TerminalFormatter()
+                )
             self.finish(body_struct)
     @asynchronous
     @gen.engine
@@ -237,6 +256,12 @@ class ExtensionDetailsHandler(BaseHandler):
                     'out': self.filter_return_values(stdout)
                 }
             body_struct['request'] = job_results
+            if config['output_highlighter']:
+                body_struct = highlight(
+                    unicode(json.dumps(body_struct,indent=5), 'UTF-8'),
+                    lexers.guess_lexer(json.dumps(body_struct)),
+                    formatters.TerminalFormatter()
+                )
             self.finish(body_struct)
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
@@ -252,6 +277,12 @@ class ExtensionDetailsHandler(BaseHandler):
                     'err': self.filter_return_values(stderr)
                 }
             body_struct['request'] = job_results
+            if config['output_highlighter']:
+                body_struct = highlight(
+                    unicode(json.dumps(body_struct,indent=5), 'UTF-8'),
+                    lexers.guess_lexer(json.dumps(body_struct)),
+                    formatters.TerminalFormatter()
+                )
             self.finish(body_struct)
 
     @asynchronous
@@ -277,6 +308,12 @@ class ExtensionDetailsHandler(BaseHandler):
                     'out': self.filter_return_values(stdout)
                 }
             body_struct['request'] = job_results
+            if config['output_highlighter']:
+                body_struct = highlight(
+                    unicode(json.dumps(body_struct,indent=5), 'UTF-8'),
+                    lexers.guess_lexer(json.dumps(body_struct)),
+                    formatters.TerminalFormatter()
+                )
             self.finish(body_struct)
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
@@ -292,6 +329,12 @@ class ExtensionDetailsHandler(BaseHandler):
                     'err': self.filter_return_values(stderr)
                 }
             body_struct['request'] = job_results
+            if config['output_highlighter']:
+                body_struct = highlight(
+                    unicode(json.dumps(body_struct,indent=5), 'UTF-8'),
+                    lexers.guess_lexer(json.dumps(body_struct)),
+                    formatters.TerminalFormatter()
+                )
             self.finish(body_struct)
 
     @asynchronous
@@ -317,6 +360,12 @@ class ExtensionDetailsHandler(BaseHandler):
                     'out': self.filter_return_values(stdout)
                 }
             body_struct['request'] = job_results
+            if config['output_highlighter']:
+                body_struct = highlight(
+                    unicode(json.dumps(body_struct,indent=5), 'UTF-8'),
+                    lexers.guess_lexer(json.dumps(body_struct)),
+                    formatters.TerminalFormatter()
+                )
             self.finish(body_struct)
         else:
             retcode, stdout, stderr = yield gen.Task(extension.execute, self.params)
@@ -332,8 +381,13 @@ class ExtensionDetailsHandler(BaseHandler):
                     'err': self.filter_return_values(stderr)
                 }
             body_struct['request'] = job_results
+            if config['output_highlighter']:
+                body_struct = highlight(
+                    unicode(json.dumps(body_struct,indent=5), 'UTF-8'),
+                    lexers.guess_lexer(json.dumps(body_struct)),
+                    formatters.TerminalFormatter()
+                )
             self.finish(body_struct)
-
     def get_extension(self, extension_name, http_method):
         extension = self.settings['extensions'].get(extension_name, None)
 

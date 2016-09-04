@@ -18,6 +18,7 @@ Requires:       python
 Requires:       python-setuptools
 Requires:       python-requests
 Requires:       python-tornado
+Requires:       python-pygments
 Requires:       PyYAML
 
 %define service_name %{name}d

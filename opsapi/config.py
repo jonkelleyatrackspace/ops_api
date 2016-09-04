@@ -21,6 +21,7 @@ log = logging.getLogger(__name__)
 # Contains default mappings before yaml loads
 default_mappings = {}
 default_mappings['disable_debug_console'] = False
+default_mappings['output_highlighter'] = False
 
 class Config(dict):
     """ Configuration dictionary """
