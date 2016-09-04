@@ -12,7 +12,6 @@
 # subject to the above copyright notice and this permission notice shall being included
 # in all copies or substantial portions of the Software.
 
-from pygments.styles import
 from pygments import highlight, lexers, formatters
 import logging
 import httplib
@@ -111,7 +110,7 @@ class BaseHandler(RequestHandler):
             message = kwargs['exc_info'][1].log_message
         else:
             # TODO: What should go here?
-            message = ''
+            message = [-1]
 
         body_struct = {}
         if config['disable_debug_console'] == False:
@@ -121,7 +120,7 @@ class BaseHandler(RequestHandler):
             }
         body_struct['request'] = {
                 'status': status_code,
-                'errors': message,
+                'troubleshoot': message,
                 'status': "500 Internal Server Error"
             }
         if config['output_highlighter']:
