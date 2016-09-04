@@ -1,19 +1,6 @@
 #SERIAL 201601291542
 # Base the name of the software on the spec file
 PACKAGE := $(shell basename *.spec .spec)
-# Override this arch if the software is arch specific
-ARCH = noarch
-
-# Variables for clean build directory tree under repository
-BUILDDIR = ./build
-ARTIFACTDIR = ./artifacts
-SDISTDIR = ${ARTIFACTDIR}/sdist
-WHEELDIR = ${ARTIFACTDIR}/wheels
-RPMBUILDDIR = ${BUILDDIR}/rpm-build
-RPMDIR = ${ARTIFACTDIR}/rpms
-DEBBUILDDIR = ${BUILDDIR}/deb-build
-DEBDIR = ${ARTIFACTDIR}/debs
-
 PAVER := $(shell which paver)
 
 install:

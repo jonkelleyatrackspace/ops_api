@@ -8,10 +8,11 @@ import paver.doctools
 from paver.setuputils import setup
 import shutil
 import os
+import platform
 
-def load_kv_from_spec(getkey):
+def value_from_specfile(getkey):
     """
-    nonregistered helper that loads the version from the .spec file
+    loads the version and other keys from the .spec file
     which shall be our source of truth for versioning.
 
     i looked into using rpm, but the library is really really unwieldy
@@ -21,16 +22,16 @@ def load_kv_from_spec(getkey):
     with open("opsapi.spec", "r") as f:
         for line in f.readlines():
             try:
-                value = line.split(":")[1].lstrip()
-                key = line.split(":")[0].lstrip().lower()
+                value = line.split(":")[1].lstrip().strip()
+                key = line.split(":")[0].lstrip().lower().rstrip()
                 print("X"+str(key))
                 spec[key] = value
             except:
                 pass
-        print(spec)
         return spec[getkey]
 
 __doc__ = """ Setuptools with paver """
+
 install_requires = [
     'pyyaml==3.10',
     'tornado==3.0.1',
@@ -38,19 +39,36 @@ install_requires = [
     'passlib==1.6'
 ]
 setup(
-    name="opsapi",
-    version=load_kv_from_spec('version'),
+    name=value_from_specfile('name'),
+    version=value_from_specfile('version'),
     author="Jonathan Kelley",
     author_email="jonkelley@gmail.com",
-    description="Lightweight API framework with simple extension SDK to allow rapid prototype of infrastructure-as-a-service concepts.",
-    url="https://github.com/jonkelleyatrackspace/ops_api",
-    packages=['opsapi'],
+    description=value_from_specfile('summary'),
+    url=value_from_specfile('url'),
+    packages=[str(value_from_specfile('name'))],
     install_requires=install_requires,
     entry_points={
         'console_scripts': [
-            'opsapi = opsapi.server:main'
+             '{name} = {name}.server:main'.format(
+                 name=value_from_specfile('name'))
         ]
     },
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: System Administrators",
+        "Intended Audience :: Developers",
+        "Intended Audience :: Customer Service",
+        "License :: OSI Approved :: MIT License",
+        "Natural Language :: English",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 2 :: Only",
+        "Topic :: Utilities",
+        "Topic :: Internet :: WWW/HTTP",
+        "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+        "Topic :: Internet :: WWW/HTTP :: Site Management",
+        "Topic :: System :: Operating System",
+        "Topic :: System :: System Shells"
+    ],
     zip_safe=False
 )
 
@@ -107,6 +125,10 @@ def start():
     START a local dev instance for testing
     """
     sudo_warning()
+    uname = platform.uname()[0]
+    if uname == 'Linux':
+        print("Killing opsapi...")
+        sh('pkill opsapi')
     sh('opsapi --dir=/srv/extensions')
 
 
