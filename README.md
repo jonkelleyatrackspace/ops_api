@@ -2,7 +2,7 @@
 
 OpsAPI is a lightweight API/HTTP framework in Tornado which allows users to extend and prototype mid complexity API designs and process solutions -- hours not weeks. I promise. 
 
-This project was built for systems engineers and developers who need to automate orchestration of tasks on a system and can appreciate the speed and convienence of a stateless API. You can automate your mundane daily management tasks with the built in extensions for subprocess, fabric, ansible, postgres, mysql or memcache.
+This is intended to empower systems engineers and developers looking to cut the lifting out of running their ops shop. Yes there's Rundeck/Jenkin's but you can't build a larger platform on top of that -- an API can. Use the pluggable nature of this API to leverage hooks for your favorite fabric, ansible, postgres, mysql or memcache extensions.
 
 A real wizard could have multiple opsAPI deployments interconnected with Python-requests to create complex build pipelines and processes. Then they would use the beautiful [marmelab/ng-admin](https://github.com/marmelab/ng-admin) to create a browser app. Now where's the beach?
 
