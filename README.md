@@ -217,8 +217,7 @@ Special characters and other items that JSON cannot tokenize are invalid. Any kn
 
 ## Command Line Usage
 
-NOTE: You can use the apache htpasswd utility (from `apache2-utils` or `httpd-tools`), to create your htpasswd files.
-
+NOTE: You can use the apache htpasswd utility to create a htpasswd file for embedded www-basic-auth. That means install the `apache2-utils` deb or `httpd-tools` rpm while you're at it.
 
     Usage: opsapi [options] <htpasswd>
 
@@ -255,11 +254,11 @@ NOTE: You can use the apache htpasswd utility (from `apache2-utils` or `httpd-to
 
 Some features may require additional configuration.
 
-This API can support YAML configuration files from some usual locations or with the --config startup parameter, if you want to get fancy. The aggregated configurations are merged into a running configuration.  NOTE: Syntax is key: v. Only python objects allowed as values. Native YAML lists and hash syntax are unsupported!
+This API can support YAML configuration files from some usual locations or with the --config option if you really need it. NOTE: All the configurations are merged into the running configuration if loaded.  NOTE: Syntax supports key: v with full python eval support. NOTE:  YAML Style list and hashes are not supported.
 
-The a default config file sample is located in `opsapi.yaml` and will be used if you start `opsapi` from the git repository.
+The default config has some interesting options in `opsapi.yaml`, you should take a look and configure.
 
-The default load locations for configuration files are:
+The default load locations on startup are:
 
 * `/etc/opsapi.{yaml,yml}`
 * `./opsapi.{yaml,yml}`
