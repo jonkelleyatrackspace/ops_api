@@ -6,6 +6,7 @@
 
 ### Version 1.0
 
+- Milestone release
 - + Lots of new features, finally a pretty stable product.
 - + Wired in make/build system in paver
 - + Added .spec file
@@ -18,3 +19,9 @@
 - + Created test extension example.
 - + Cleaned up and modularized how reporting for return values work.
 
+### Version 2.0
+
+- Milestone release
+- Huge bump in version since file-based extension loader has been refactored to a py extension module loader.
+- Adding ability to load extension modules from config file settings.
+- Refactor SDK api to be class driven rather then use other modules class properties.

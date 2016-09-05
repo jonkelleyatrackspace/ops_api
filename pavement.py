@@ -54,7 +54,7 @@ setup(
         ]
     },
     classifiers=[
-        "Development Status :: 5 - Production/Stable",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: System Administrators",
         "Intended Audience :: Developers",
         "Intended Audience :: Customer Service",
