@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="http://i.imgur.com/TAADBoG.png" width="350"/>
+  <img src="http://i.imgur.com/BjOnHzT.png" width="350"/>
 </p>
 
 # opsApi
