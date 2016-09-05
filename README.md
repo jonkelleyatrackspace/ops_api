@@ -301,10 +301,14 @@ Fields:
   - **lock**: if true, only one instance of the extension will be allowed to run. useful to prevent RACE conditions if your code cannot support parallelism 
     - format: lock: True
     - default: False
-    
+
+### Extension Python SDK
+
+Todo
+
 ### Extensions List
 
-Returns information about all the extension.
+Get a list of all loaded extensions with parameters and options.
 
     GET /extensions
 
@@ -319,7 +323,7 @@ Optional Tag Query Parameters:
 
 ### Extensions Names List
 
-Returns list of names of all pluggable extensions
+Returns list of names of all loaded extensions
 
     GET /extension_names
 
@@ -331,21 +335,24 @@ Optional Tag Query Parameters:
    - not_tags: only those extensions which do no have *ANY* of the tags will be returned
    - any_tags: extensions that match *ANY* tags will be returned
 
+### Get help on specific extension
 
-### Get Information about an extension
-
-This will return the help parameters, description, and other data about an extension.
+This will return config block metadata for one specific extension. Note the rarely used OPTIONS http method.
 
     OPTIONS /extensions/{extension_name}
 
-### Run a extension
+### Trigger an extension
 
 You would execute POST data to an extension and return results with
 
     POST /extensions/{extension_name}
 
+You would execute GET to an extension to just read data from it.
+
+    GET /extensions/{extension_name}
+
 ### Reload the extension directories
 
-This request will reload updates to code in the extensions
+This will reload config and extension code from disk without restarting.
 
     POST /reload
