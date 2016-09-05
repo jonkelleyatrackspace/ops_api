@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="http://i.imgur.com/szd8Y6Q.png" width="350"/>
+</p>
+
 # opsApi
 
 OpsAPI is a lightweight API/HTTP framework in Tornado which allows users to extend and prototype mid complexity API designs and process solutions -- hours not weeks. I promise. 
