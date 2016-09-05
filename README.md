@@ -187,15 +187,16 @@ You should see this response:
 
 ## Security Model
 
-The API has input string management classes to handle the possibility of bad-actor injection attempts. This API should never be exposed without authentication, but if you do then there are a few precautions to delay compromise.
+The API has input string management classes to handle the possibility of bad-actor injection attempts. This will prevent most casual to intermediate attempts of injection using a variety of known methods. **Absolutely no security will be foolproof.** Always use trusted authentication in front of this service or htpasswd.
 
-Do I want to CREATE a role or DROP the postgres role?
+
+Here is a demonstration attempt of SQL injection, naughty naughty.
 
     curl -XPOST http://localhost:3000/extensions/psql_create_role -H "Content-Type: application/json" -d '{ "role": "jonkelley", "password": "SERVER'\''; DROP ROLE postgres;HACKED", "connection_limit": "3"}'
 
-This request is audited by a log event `SecurityFaultDangerousUserInput value: "SERVER'; DROP ROLE postgres;HACKED"`
+System Log: `EXCEPTION: SecurityFaultDangerousUserInput value: "SERVER'; DROP ROLE postgres;HACKED"`
 
-You should see this response:
+The user should see this response:
 
     {
         "debug": {
@@ -211,6 +212,8 @@ You should see this response:
             "status": "500 Internal Server Error"
         }
     }
+
+Special characters and other items that JSON cannot tokenize are invalid. Any knwon abilities to fuzz past the escape filters seems pretty difficult at this stage. 
 
 ## Command Line Usage
 
