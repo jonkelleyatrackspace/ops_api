@@ -217,7 +217,7 @@ The user should see this response:
         }
     }
 
-Special characters and other items that JSON cannot tokenize are invalid. Any knwon abilities to fuzz past the escape filters seems pretty difficult at this stage. 
+Special characters and other items that JSON cannot tokenize are invalid. Any knwon abilities to fuzz past the escape filters seems pretty difficult at this stage. We will predictively fail with 500, because potential unexpected conditions will result in 500 as well. 500 for all the things ensures the attacker has no direct knowledge of handled vs unhandled errors.
 
 ## Command Line Usage
 
