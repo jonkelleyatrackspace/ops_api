@@ -40,6 +40,8 @@ You should see this response:
 
 ## Real-World Examples
 
+### Postgres Examples
+
 Create a Postgres role called jonkelley. 
 
     curl -XPOST http://localhost:3000/extensions/psql_create_role -H "Content-Type: application/json" -d '{ "role": "jonkelley", "password": "qwerty", "connection_limit": "3"}' 
@@ -94,6 +96,23 @@ You should see this response:
             "status": 1
         }
     }
+
+
+### Ansible Examples
+
+Todo
+
+### Fabric Examples
+
+Todo
+
+### MySQL Examples
+
+Todo
+
+### Memcache Examples
+
+Todo
 
 ## API Input Parsing / Limit Features
 
