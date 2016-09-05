@@ -19,53 +19,88 @@
 # lock: False
 # -- end config --
 
-from extension import Constants
+from extension import Constants, Extension
+from extension import Parameter
 from extension import ParamHandle as Param
 import datetime
 
 # Spawn Instances
-p = Param()    # <class> Parame ter manipulation
-params = p.list()    # <dict>  A dict of params
-dt = datetime.datetime.now()  #<datetime> object
+parent_params = Param()
+parent_param = parent_params.list() # Get dict of params
+dt = datetime.datetime.now() #<datetime> object
 
-# ************************************
-# *  DEFINE PARAMETERS AND VALIDATE  *
-# ************************************
-arguement = {} # The actual API params we pass
+def parameter(ok):
+  """ Dummy function for validation """
+  return ok
 
-param = "name"
-name = Param()
-name.value = params[param]
-name.name = param
-name.require = True
-name.max_length = 128
-arguement[param] = name.get()
+registry = {}
+def register_parameter(cls):
+    name = cls.__name__
+    force_bound = False
+    if '__init__' in cls.__dict__:
+        cls.__init__.func_globals[name] = cls
+        force_bound = True
+    try:
+        registry[name] = cls()
+    finally:
+        if force_bound:
+            del cls.__init__.func_globals[name]
+    return cls
 
+@register_parameter
+class name(Parameter):
+    name = "name"
+    value = parent_param[name]
+    __doc__ = "Your name"
+    error_if_undefined = True
+    max_length = 128
+    censor_log = False
 
-param = "age"
-age = Param()
-age.value = params[param]
-age.name = param
-age.require = True
-age.max_length = 3
-age.max_int = 99
-arguement[param] = age.get()
-# Calculate cake day
-birthyear =  dt.year - int(arguement['age'])
+@register_parameter
+class age(Parameter):
+    name = "age"
+    value = parent_param[name]
+    __doc__ = "Your age"
+    error_if_undefined = True
+    max_len = 3
+    max_int = 99
+    censor_log = False
 
+class test(Extension):
+    def __init__(self):
+        Extension.__init__(self)
 
-# *************
-# *  RESULTS  *
-# *************
-print(("{status} current_datetime={datetime}\n"
-  "{status} name={whom}\n"
-  "{status} age={age}\n"
-  "{status} status={u} was born in {year}").format(
-  status=Constants.API_RETURN_STRING,
-  age=arguement['age'],
-  whom=arguement['name'],
-  u=arguement['name'].title(),
-  year=birthyear,
-  datetime=dt))
+    def run(self):
+        #Your code here...
+        print("IT works!")
+        birthyear =  dt.year - int(arguement['age'])
+
+        # *************
+        # *  RESULTS  *
+        # *************
+        print(("{status} current_datetime={datetime}\n"
+          "{status} name={whom}\n"
+          "{status} age={age}\n"
+          "{status} status={u} was born in {year}").format(
+          status=Constants.API_RETURN_STRING,
+          age=arguement['age'],
+          whom=arguement['name'],
+          u=arguement['name'].title(),
+          year=birthyear,
+          datetime=dt))
+
+def return_parameters():
+    """ Will return a dictionaries, key of the parameter
+    name and """
+    x = {}
+    for parameter,cls in registry.iteritems():
+      x[cls.name] = {}
+      cls.value = parent_param[cls.name] # Set the value from ENV
+      x[cls.name]['value'] = cls.value
+      x[cls.name]['censor_log'] = cls.censor_log
+
+    return x
+
+print(return_parameters())
 
 exit(0)
