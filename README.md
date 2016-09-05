@@ -38,7 +38,64 @@ You should see this response:
         }
     }
 
-## Logic Sample
+## Real-World Examples
+
+Create a Postgres role called jonkelley. 
+
+    curl -XPOST http://localhost:3000/extensions/psql_create_role -H "Content-Type: application/json" -d '{ "role": "jonkelley", "password": "qwerty", "connection_limit": "3"}' 
+
+You should see this response:
+
+    {
+        "debug": {
+            "err": [],
+            "out": [
+                "BEGIN; CREATE ROLE jonkelley WITH  CONNECTION LIMIT 3  NOCREATEUSER  NOCREATEROLE  NOCREATEDB  NOINHERIT  NOLOGIN  UNENCRYPTED  PASSWORD 'qwerty' ; END;",
+                "BEGIN",
+                "CREATE ROLE",
+                "COMMIT",
+                ""
+            ]
+        },
+        "request": {
+            "result": "ok",
+            "status": 0
+        }
+    }
+
+Attempt to drop the role billgates
+
+    curl -XPOST http://localhost:3000/extensions/psql_drop_role -H "Content-Type: application/json" -d '{ "role": "billgates"}'
+
+You should see this response:
+
+    {
+        "debug": {
+            "err": [
+                "psql:/tmp/tmpVeJay3:1: ERROR:  role \"billgates\" does not exist",
+                "psql:/tmp/tmpVeJay3:1: ERROR:  role \"billgates\" does not exist",
+                "ROLLBACK"
+            ],
+            "out": [
+                "BEGIN; DROP ROLE billgates; END;",
+                "BEGIN",
+                "psql:/tmp/tmpVeJay3:1: ERROR:  role \"billgates\" does not exist",
+                "ROLLBACK",
+                ""
+            ]
+        },
+        "request": {
+            "errors": [
+                "TRANSACTION_ROLLBACK",
+                "SQL_ERROR",
+                "ROLE_DOES_NOT_EXIST"
+            ],
+            "result": "rollback",
+            "status": 1
+        }
+    }
+
+## API Input Parsing / Limit Features
 
 Depending on how you set up your param requirements in the SDK, the API has a bunch of built in filtering and input management options you can manage.
 
@@ -84,41 +141,8 @@ You should see this response:
         }
     }
 
-## Real-World Example
-
-Now you can start to envision a real use for the framework:
-
-    curl -XPOST http://localhost:3000/extensions/psql_drop_role -H "Content-Type: application/json" -d '{ "role": "jonkeley"}'
-
-You should see this response:
-
-    {
-        "debug": {
-            "err": [
-                "psql:/tmp/tmpVeJay3:1: ERROR:  role \"jonkelley\" does not exist",
-                "psql:/tmp/tmpVeJay3:1: ERROR:  role \"jonkelley\" does not exist",
-                "ROLLBACK"
-            ],
-            "out": [
-                "BEGIN; DROP ROLE jonkelley; END;",
-                "BEGIN",
-                "psql:/tmp/tmpVeJay3:1: ERROR:  role \"jonkelley\" does not exist",
-                "ROLLBACK",
-                ""
-            ]
-        },
-        "request": {
-            "errors": [
-                "TRANSACTION_ROLLBACK",
-                "SQL_ERROR",
-                "ROLE_DOES_NOT_EXIST"
-            ],
-            "result": "rollback",
-            "status": 1
-        }
-    }
     
-Example fat finger a request
+Example of of handling empty input parameters (when they are required)
 
     curl -XPOST http://localhost:3000/extensions/psql_create_role -H "Content-Type: application/json" -d '{ "role": "jonkelley"}'
 
@@ -139,31 +163,8 @@ You should see this response:
         }
     }
 
-Successful attempt to create the role
 
-    curl -XPOST http://localhost:3000/extensions/psql_create_role -H "Content-Type: application/json" -d '{ "role": "jonkelley", "password": "qwerty", "connection_limit": "3"}' | python -m json.tool
-
-You should see this response:
-
-    {
-        "debug": {
-            "err": [],
-            "out": [
-                "BEGIN; CREATE ROLE jonkelley WITH  CONNECTION LIMIT 3  NOCREATEUSER  NOCREATEROLE  NOCREATEDB  NOINHERIT  NOLOGIN  UNENCRYPTED  PASSWORD 'qwerty' ; END;",
-                "BEGIN",
-                "CREATE ROLE",
-                "COMMIT",
-                ""
-            ]
-        },
-        "request": {
-            "result": "ok",
-            "status": 0
-        }
-    }
-
-
-## Security Modeling
+## Security Model
 
 The API has input string management classes to handle the possibility of bad-actor injection attempts. This API should never be exposed without authentication, but if you do then there are a few precautions to delay compromise.
 
@@ -226,7 +227,7 @@ NOTE: You can use the apache htpasswd utility (from `apache2-utils` or `httpd-to
       -u UNIX_SOCKET, --unix-socket=UNIX_SOCKET
                             Bind opsapi to a unix domain socket
 
-## Configuration File Support
+## Configuration File Options
 
 Some features may require additional configuration.
 
@@ -241,9 +242,9 @@ The default load locations for configuration files are:
 * `/etc/opsapi/opsapi.{yaml,yml}`
 * `~/opsapi.{yaml,yml}`
 
-## API for Extensions
+## Using the extension SDK
 
-### Configuration Block Markup
+### Extension file header config blocks
 
 Config blocks help build metadata about the extension that opsapi is loading into memory.  Config blocks are not mandatory for the extension to run (only if you reference params).
 
