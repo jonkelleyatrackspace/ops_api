@@ -4,7 +4,7 @@ OpsAPI is a lightweight API/HTTP framework in Tornado which allows users to exte
 
 This is intended to empower systems engineers and developers looking to cut the lifting out of running their ops shop. Yes there's Rundeck/Jenkin's but you can't build a larger platform on top of that -- this API is the missing loose couple. Use the pluggable nature of this API and you can hook Ansible, Fabric, or local Postgres bindings from Rundeck OR Jenkins.
 
-A real wizard could have multiple opsAPI deployments interconnected with Python-requests to create complex build pipelines and processes. Then they would use the beautiful [marmelab/ng-admin](https://github.com/marmelab/ng-admin) to create a browser app. Now where's the beach?
+A real wizard could have multiple opsAPI deployments interconnected with Python-requests to create complex build pipelines and processes. Then they would use the beautiful [marmelab/ng-admin](https://github.com/marmelab/ng-admin) to create a browser app. Ditch Jenkins. Now where's the beach?
 
 ## Quick dev environment
 
