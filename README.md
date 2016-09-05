@@ -194,7 +194,7 @@ You should see this response:
 The API has input string management classes to handle the possibility of bad-actor injection attempts. This will prevent most casual to intermediate attempts of injection using a variety of known methods. **Absolutely no security will be foolproof.** Always use trusted authentication in front of this service or htpasswd.
 
 
-Here is a demonstration attempt of SQL injection, naughty naughty.
+Here is a demonstration attempt of malicious SQL injection, naughty naughty.
 
     curl -XPOST http://localhost:3000/extensions/psql_create_role -H "Content-Type: application/json" -d '{ "role": "jonkelley", "password": "SERVER'\''; DROP ROLE postgres;HACKED", "connection_limit": "3"}'
 
