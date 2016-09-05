@@ -357,6 +357,6 @@ You would execute GET to an extension to just read data from it.
 
 ### Reload the extension directories
 
-This will reload config and extension code from disk without restarting.
+Reloads *Disk Configs* and all *Extension* code into memory without restart.
 
     POST /reload
