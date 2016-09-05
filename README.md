@@ -1,6 +1,6 @@
 # opsApi
 
-OpsAPI is a lightweight API/HTTP framework in Tornado which allows users to extend and prototype simple to mid complexity API designs in hours not weeks. I promise. 
+OpsAPI is a lightweight API/HTTP framework in Tornado which allows users to extend and prototype mid complexity API designs and process solutions -- hours not weeks. I promise. 
 
 This project was built for systems engineers and developers who need to automate orchestration of tasks on a system and can appreciate the speed and convienence of a stateless API. You can automate your mundane daily management tasks with the built in extensions for subprocess, fabric, ansible, postgres, mysql or memcache.
 
