@@ -19,13 +19,16 @@
 # lock: False
 # -- end config --
 
+from __future__ import (print_function, absolute_import)
+import datetime
+
 from constants import Constants as constants
 from constants import HttpMethod as method
-from param import ParameterCollection, BaseParameter, get_parameter, validate_parameters
+from param import (ParameterCollection, BaseParameter, get_parameter, validate_parameters)
 from param import Convert as convert
-from extension import Session, BaseExtension
+from param import (Session, BaseExtension)
 
-import datetime
+
 
 dt = datetime.datetime.now()
 parameter = ParameterCollection()
@@ -67,7 +70,9 @@ class age(BaseParameter):
       value=user_input)
 
 # Don't forget this! o.O
+import timeit
 validate_parameters(parameter)
+
 
 
 # *************************

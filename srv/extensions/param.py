@@ -11,10 +11,12 @@
 #    subject to the above copyright notice and this permission notice shall being included
 #    in all copies or substantial portions of the Software.
 
-from extension import Session
+from __future__ import (print_function, absolute_import)
 from os import environ
 import inspect # used by compile_parameters()
+import sys
 
+from constants import Constants
 
 def validate_parameters(cls_collection):
     """
@@ -234,3 +236,85 @@ class BaseParameter():
             return True
         else:
             return False
+
+
+def print_stderr(*args, **kwargs):
+    """
+    Prints a message to stderr.
+    Requires sys.stderr
+
+    """
+    print(*args, file=sys.stderr, **kwargs)
+
+class BaseExtension():
+    """
+    This defines a single extension within the framework.
+    """
+    def __init__(self):
+        #keeps track of the scripts output
+        self._outputData = []
+        self.trigger = 'call'
+        #used to stop any loops you may have
+        self._running = True
+
+    def build_extension_id(self,uuid):
+        self.uuid = "".join(uuid.split("-"))
+        return
+
+    def _output(self, data):
+        self._outputData.append(data)
+
+    def get_output(self):
+        return self._outputData
+
+    def stop(self):
+        self._running = False
+
+class Session():
+    """
+    This is used for handling exiting the request framework in a handled manner.
+    """
+    @staticmethod
+    def exit(code=0):
+        """
+        Just exit. Not typically called by itself.
+        """
+        exit(code)
+
+    @staticmethod
+    def close(exitcode):
+        """
+        Just exit. Not typically called by itself.
+        """
+        exit(exitcode)
+
+    @staticmethod
+    def fail(name="", exitcode=1, error_indicators=[], message="",stdout=None,stderr=None):
+        """
+        Used to trigger a fail message.
+        """
+        print("{return_macro} parameter='{param}'".format(param=name, return_macro=Constants.API_RETURN_STRING))
+        print("{return_macro} statusMsg='{message}'".format(message=message, return_macro=Constants.API_RETURN_STRING))
+        print("{return_macro} status={exitcode}".format(exitcode=exitcode, return_macro=Constants.API_RETURN_STRING))
+        print("{return_macro} troubleshoot={error_indicators}".format(error_indicators=error_indicators, return_macro=Constants.API_RETURN_STRING))
+        print_stderr(stderr)
+        print(stdout)
+        exit(exitcode)
+
+    @staticmethod
+    def fail_null_parameter(name=""):
+        """
+        Template for erroring when input is NULL
+        """
+        Session.fail(name,exitcode=199,
+            error_indicators=['NULL_INPUT_ERROR'],
+            message="Unprocessable entity, undefined parameter")
+
+    @staticmethod
+    def fail_badchar_parameter(name=""):
+        """
+        Template for erroring when input has bad input characters
+        """
+        Session.fail(name,exitcode=198,
+            error_indicators=['INPUT_CONTAINS_INVAL_DATA'],
+            message="Unprocessable entity, parameter contains invalid character")

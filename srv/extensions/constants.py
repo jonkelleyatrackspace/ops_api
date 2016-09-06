@@ -9,6 +9,8 @@
 #    subject to the above copyright notice and this permission notice shall being included
 #    in all copies or substantial portions of the Software.
 
+from __future__ import absolute_import
+
 class Constants():
     """
     These are constants you may want to reference in your local modules.
