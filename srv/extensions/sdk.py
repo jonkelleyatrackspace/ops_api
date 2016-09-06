@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# file: sdk.py
 # Copyright 2016, Jonathan Kelley
 #
 # License: the mit license
@@ -18,7 +19,27 @@ import sys
 
 from constants import Constants
 
-SDK_VERSION = "2"
+"""
+This is the Source Development Kit (SDK) for OpsAPI
+https://github.com/jonkelleyatrackspace/ops_api
+
+This can be imported from within the namespace of extension modules, and is used by the
+CORE extensions available to opsapi. You can utilize this SDK in your own extensions
+by accessing classes, functions and methods. Private methods/functions will start with
+an underscore, and should NOT be called (they may change between "official" versions.
+"""
+ 
+# This SDK is subject to change. If you modify a public function, classname or method
+# then look at what you should mark this change as below.
+# - New Classes/Methods           = Minor Release
+# - Rename/Delete Classes/Methods = Major Release
+# The Tornado app will build a collection of extensions and check sdk compatability
+# against the version below. If the version is not compatible then the extension
+# will be excluded from the import into OPSAPI and a log message generated.
+#
+# Extensions will be able to use > < macros in their definitions to take advantage
+# of known specifics. Format is SDK_VERSION = "M.m" (M=major,m=minor)
+SDK_VERSION = "2.0"
 
 def validate_parameters(cls_collection):
     """

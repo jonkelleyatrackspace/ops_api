@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Copyright 2016, Jonathan Kelley
+# file: constants.py
 #
 # License: the mit license
 #    Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -13,7 +14,8 @@ from __future__ import absolute_import
 
 class Constants():
     """
-    These are constants you may want to reference in your local modules.
+    Define any local constants you wish to use. Add member variables or structs
+    like namespace limits, bitmasks, commonly (ab)used constructs, or whatever.
     """
     LINUX_MAX_FILE_NAME_LENGTH = 255
     LINUX_MAX_FILE_PATH_LENGTH = 4096
