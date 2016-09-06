@@ -13,11 +13,12 @@
 #    in all copies or substantial portions of the Software.
 
 # -- config --
-# description: This config block will go away soon once tornado v2 sdk api refactor is merged, there are class properties below that describe parms.
+# description: This whole config block will dsiappear once tornado hooks the v2 API in this branch. The class member properties below will provide what this config block was once required for.
 # param: name - Your name
 # param: age - Your age
 # http_method: post
 # lock: False
+# tags: example_1, test_tag, try_me
 # -- end config --
 
 from __future__ import (print_function, absolute_import)
