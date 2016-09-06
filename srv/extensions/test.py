@@ -42,7 +42,14 @@ class name(BaseParameter):
   censor_logs = False
 
   def evalulate_parameter(self,parameter_input):
-    self.fail_if_null(self.name, parameter_input)
+    # die if parameter JSON missing in request
+    self.fail_if_null(
+      parameter=self.name,
+      value=parameter_input)
+    self.disallow_characters(
+      parameter=self.name,
+      badlist=['-', '.'],
+      value=parameter_input)
 
 @parameter.define
 class age(BaseParameter):
@@ -53,7 +60,10 @@ class age(BaseParameter):
   censor_logs = False
 
   def evalulate_parameter(self,parameter_input):
-    self.fail_if_null(self.name, parameter_input)
+    # die if parameter JSON missing in request
+    self.fail_if_null(
+      parameter=self.name,
+      value=parameter_input)
 
 # Don't forget this! o.O
 validate_parameters(parameter)

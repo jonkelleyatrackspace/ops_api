@@ -11,7 +11,7 @@
 #    subject to the above copyright notice and this permission notice shall being included
 #    in all copies or substantial portions of the Software.
 
-from extensionSdk import EndSession
+from extension import Session
 from os import environ
 import inspect # used by compile_parameters()
 
@@ -91,7 +91,7 @@ def get_parameter(cls_collection,parameter=None,member='value'):
       param_map[real_cls_title]['__self__'] = cls_obj
     if parameter:
         # filter by parameter
-        return param_map['age']['value']
+        return param_map[parameter]['value']
     else:
         # Return all parameters in map
         return param_map
@@ -194,13 +194,23 @@ class BaseParameter():
         """
         return False
 
+
+    def disallow_characters(self,parameter, badlist ,value):
+        """
+        Asserter.
+        If we find any of the bad characters, fail. Useful for input management.
+        """
+        for c in badlist:
+            if c in value:
+                Session.fail_badchar_parameter(name=self.name)
+
     def fail_if_null(self,parameter,value):
         """
         Asserter.
         Exit if parameter is null.
         """
         if self.is_null(value):
-            EndSession.fail_null_parameter(name=self.name)
+            Session.fail_null_parameter(name=self.name)
         else:
             pass
 

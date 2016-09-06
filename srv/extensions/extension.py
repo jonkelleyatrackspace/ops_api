@@ -60,7 +60,7 @@ class Session():
         exit(exitcode)
 
     @staticmethod
-    def fail(name="", exitcode=1, error_indicators=[], message="",stdout="",stderr=""):
+    def fail(name="", exitcode=1, error_indicators=[], message="",stdout=None,stderr=None):
         """
         Used to trigger a fail message.
         """
@@ -77,7 +77,15 @@ class Session():
         """
         Template for erroring when input is NULL
         """
-        Session.fail(name,199,['NULL_INPUT_ERROR'],"Unprocessable entity, undefined parameter")
+        Session.fail(name,exitcode=199,
+            error_indicators=['NULL_INPUT_ERROR'],
+            message="Unprocessable entity, undefined parameter")
 
-
-
+    @staticmethod
+    def fail_badchar_parameter(name=""):
+        """
+        Template for erroring when input has bad input characters
+        """
+        Session.fail(name,exitcode=198,
+            error_indicators=['INPUT_CONTAINS_INVAL_DATA'],
+            message="Unprocessable entity, parameter contains invalid character")
