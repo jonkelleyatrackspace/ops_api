@@ -27,9 +27,6 @@ def validate_parameters(cls_collection):
     this introduced so the parent OPSAPI app can "query" parameters out of
     extension modules programatically. might come in handy for more.
 
-    :return <DICT> -- dict with keys of each parameter title,
-                      the value is a dict with k,v pairs of class
-                      properties.
     """
     params = get_parameter(cls_collection).iteritems()
     for cls,clsmembers in params:
@@ -39,20 +36,26 @@ def validate_parameters(cls_collection):
                 # run the evaluate function on it.
                 value.evalulate_parameter(clsmembers['value'])
 
-def get_parameter(cls_collection):
+def get_parameter(cls_collection,parameter=None,member='value'):
     """
-    this will scope through the registered Parameter class children
-    and generate a dictionary object with parameter properties out of it.
+    This will iterate through each parameter in the collection.
+    It takes all the class members and then generated parameter properties
+    out of the parameter class with it.
 
-    The cls_collection arguement should be a class instance of
-      ParameterCollection()
+    cls_collection is a class instance of ParameterCollection()
 
-    this introduced so the parent OPSAPI app can "query" parameters out of
-    extension modules programatically. might come in handy for more.
+    If you wish to retrieve the member name of a particular parameter,
+    simply define parameter, and define member as the member key you want.
+    By default it pulls parameter value.
 
-    :return <DICT> -- dict with keys of each parameter title,
-                      the value is a dict with k,v pairs of class
-                      properties.
+    -- Params --
+    parameter -- This will look for a member within this parameter class obj.
+    member -- This returns the value of this member item. 
+
+    -- Return --
+    It returns a dict with member keys from each parameter class.
+    Each parameter class has k,v pairs for its member(s)
+    <DICT>
     """
     param_map = {}
     for cls_title,cls_obj in cls_collection.collection.iteritems():
@@ -86,7 +89,12 @@ def get_parameter(cls_collection):
         except:
             pass
       param_map[real_cls_title]['__self__'] = cls_obj
-    return param_map
+    if parameter:
+        # filter by parameter
+        return param_map['age']['value']
+    else:
+        # Return all parameters in map
+        return param_map
 
 class ShellEnv():
     """

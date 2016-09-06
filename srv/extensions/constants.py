@@ -34,3 +34,16 @@ class Constants():
     # Busted user selectable socket limits can go this high
     # We don't need to get sockets too high.
     POSTGRES_MAXIMUM_CONNECTION_LIMIT = 150
+
+class HttpMethod():
+    """
+    defines common http methods from rfc2616
+    """
+    options = "OPTIONS"
+    get = "GET"
+    head = "HEAD"
+    post = "POST"
+    put = "PUT"
+    delete = "DELETE"
+    trace = "TRACE"
+    connect = "CONNECT"

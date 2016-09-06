@@ -20,22 +20,19 @@
 # -- end config --
 
 from constants import Constants as constants
+from constants import HttpMethod as method
 from param import ParameterCollection, BaseParameter, get_parameter, validate_parameters
 from param import Convert as convert
-from extension import Session, Extension
+from extension import Session, BaseExtension
 
 import datetime
 
-
-# *************************
-# * Define Local Instance *
-# *************************
 dt = datetime.datetime.now()
 parameter = ParameterCollection()
 
 
 # *************************
-# * Define Request Params *
+# * User Input Parameters *
 # *************************
 @parameter.define
 class name(BaseParameter):
@@ -43,6 +40,7 @@ class name(BaseParameter):
   name = "name"
   max_length = 128
   censor_logs = False
+
   def evalulate_parameter(self,parameter_input):
     self.fail_if_null(self.name, parameter_input)
 
@@ -53,53 +51,56 @@ class age(BaseParameter):
   max_len = 3
   max_int = 99
   censor_logs = False
+
   def evalulate_parameter(self,parameter_input):
     self.fail_if_null(self.name, parameter_input)
 
-
-# *********************************
-# * Fail if params fail vaidation *
-# *********************************
+# Don't forget this! o.O
 validate_parameters(parameter)
 
 
-# *********************************
-# * Define Request Business Logic *
-# *********************************
-class test(Extension):
+# *************************
+# * Define Business Logic *
+# *************************
+class test(BaseExtension):
+  __doc__ = "Demo SDK extention, take your name & age and print your birth year"
+  http_method = method.post # the http request verb this extension can be
+  lock = False # if True, only 1 execution at a time can run
+  tags = ['example_1', 'test_tag', 'try_me'] # tag this extension
+
   def __init__(self):
-    Extension.__init__(self)
+    BaseExtension.__init__(self) # base __init__
 
   def run(self):
     """
-    Define the code for this extension.
-    Parameters provided defined above are built by using
-       get_parameter(parameter)['age']['value']
+    So everything is ready to go. Do your business logic and return!!
+    You can reference any parameter defined above with 
+    get_parameter(parameter, NAME); where NAME is your parameter name.
 
     """
-    birthyear =  dt.year - int(get_parameter(parameter)['age']['value'])
+    birthyear =  dt.year - int(get_parameter(parameter, 'age'))
 
     # *************
     # *  RESULTS  *
     # *************
     print((
-        "{status} current_datetime={datetime}\n"
-        "{status} name={whom}\n"
-        "{status} age={age}\n"
-        "{status} status={u} was born in {year}"
-        ).format(
-        status=constants.API_RETURN_STRING,
-        age=get_parameter(parameter)['age']['value'],
-        whom=get_parameter(parameter)['name']['value'],
-        u=get_parameter(parameter)['name']['value'].title(),
-        year=birthyear,
-        datetime=dt))
+      "{status} current_datetime={datetime}\n"
+      "{status} name={whom}\n"
+      "{status} age={age}\n"
+      "{status} status={u} was born in {year}"
+      ).format(
+      status=constants.API_RETURN_STRING,
+      age=get_parameter(parameter, 'age'),
+      whom=get_parameter(parameter, 'name'),
+      u=get_parameter(parameter, 'name').title(),
+      year=birthyear,
+      datetime=dt))
     Session.close(0)
 
 
-# *************
-# * Run Logic *
-# *************
+# *****************
+# * Start Request *
+# *****************
 if __name__ == "__main__":
   me = test()
   test.run(me)

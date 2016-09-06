@@ -21,7 +21,7 @@ def print_stderr(*args, **kwargs):
     """
     print(*args, file=sys.stderr, **kwargs)
 
-class Extension():
+class BaseExtension():
     """
     This defines a single extension within the framework.
     """
