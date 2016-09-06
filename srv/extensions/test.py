@@ -12,7 +12,7 @@
 #    in all copies or substantial portions of the Software.
 
 # -- config --
-# description: A test file to validate functionality and get up and running
+# description: This config block will go away soon since class properties encode this now.....
 # param: name - Your name
 # param: age - Your age
 # http_method: post
@@ -41,15 +41,16 @@ class name(BaseParameter):
   max_length = 128
   censor_logs = False
 
-  def evalulate_parameter(self,parameter_input):
+  def input_validation(self,user_input):
     # die if parameter JSON missing in request
     self.fail_if_null(
       parameter=self.name,
-      value=parameter_input)
+      value=user_input)
+    # die if any of these "bad" characters get procesed
     self.disallow_characters(
       parameter=self.name,
       badlist=['-', '.'],
-      value=parameter_input)
+      value=user_input)
 
 @parameter.define
 class age(BaseParameter):
@@ -59,11 +60,11 @@ class age(BaseParameter):
   max_int = 99
   censor_logs = False
 
-  def evalulate_parameter(self,parameter_input):
+  def input_validation(self,user_input):
     # die if parameter JSON missing in request
     self.fail_if_null(
       parameter=self.name,
-      value=parameter_input)
+      value=user_input)
 
 # Don't forget this! o.O
 validate_parameters(parameter)
@@ -73,7 +74,7 @@ validate_parameters(parameter)
 # * Define Business Logic *
 # *************************
 class test(BaseExtension):
-  __doc__ = "Demo SDK extention, take your name & age and print your birth year"
+  __doc__ = "Demo extension for v2 SDK, take your name & age and print your birth year"
   http_method = method.post # the http request verb this extension can be
   lock = False # if True, only 1 execution at a time can run
   tags = ['example_1', 'test_tag', 'try_me'] # tag this extension
@@ -83,7 +84,7 @@ class test(BaseExtension):
 
   def run(self):
     """
-    So everything is ready to go. Do your business logic and return!!
+    So everything is ready to go. Do your logic and return!!
     You can reference any parameter defined above with 
     get_parameter(parameter, NAME); where NAME is your parameter name.
 

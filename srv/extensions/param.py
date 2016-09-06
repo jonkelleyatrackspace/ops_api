@@ -185,14 +185,15 @@ class BaseParameter():
     def __call__(self):
         pass
 
-    def evalulate_parameter(self,parameter_input_from_userland):
+    def input_validation(self,user_input):
         """
         Evaluator.
-        This can be redefined to call assertion functions
-        on each parameter. This method is called when a request
-        is made to ensure the parameter input meets the authors intentions.
+        Redefine this as you need to validate the parameter's user_input
+        on execution. You can set the self.value property at your own
+        discretion. Primarily used to QUIT when bad inputs caught.
         """
-        return False
+        # self.value = "new value"
+        return
 
 
     def disallow_characters(self,parameter, badlist ,value):
