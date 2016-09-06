@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="http://i.imgur.com/BjOnHzT.png" width="350"/>
+  <img src="http://i.imgur.com/tztYiHH.png" alt="A high level picture of the logical architecture and consumer use-cases" title="A high level picture of the logical architecture and consumer use-cases" width="350"/>
 </p>
 
 # opsApi
