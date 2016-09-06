@@ -24,9 +24,9 @@ import datetime
 
 from constants import Constants as constants
 from constants import HttpMethod as method
-from param import (ParameterCollection, BaseParameter, get_parameter, validate_parameters)
-from param import Convert as convert
-from param import (Session, BaseExtension)
+from sdk import (ParameterCollection, BaseParameter, get_parameter, validate_parameters)
+from sdk import Convert as convert
+from sdk import (Session, BaseExtension)
 
 
 

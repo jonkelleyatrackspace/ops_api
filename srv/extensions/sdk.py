@@ -18,6 +18,8 @@ import sys
 
 from constants import Constants
 
+SDK_VERSION = "2"
+
 def validate_parameters(cls_collection):
     """
     this will scope through the registered Parameter class children
