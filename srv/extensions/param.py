@@ -34,7 +34,7 @@ def validate_parameters(cls_collection):
             if class_member == "__self__":
                 # We found the reference to its own class object
                 # run the evaluate function on it.
-                value.evalulate_parameter(clsmembers['value'])
+                value.input_validation(clsmembers['value'])
 
 def get_parameter(cls_collection,parameter=None,member='value'):
     """
