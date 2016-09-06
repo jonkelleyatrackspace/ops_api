@@ -75,6 +75,7 @@ validate_parameters(parameter)
 # *************************
 class test(BaseExtension):
   __doc__ = "Demo extension for v2 SDK, take your name & age and print your birth year"
+  uuid = "b0b934fd-d978-4bd8-b194-1cd4a3f5166b" # unique identifier for extension
   http_method = method.post # the http request verb this extension can be
   lock = False # if True, only 1 execution at a time can run
   tags = ['example_1', 'test_tag', 'try_me'] # tag this extension

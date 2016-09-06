@@ -32,6 +32,10 @@ class BaseExtension():
         #used to stop any loops you may have
         self._running = True
 
+    def build_extension_id(self,uuid):
+        self.uuid = "".join(uuid.split("-"))
+        return
+
     def _output(self, data):
         self._outputData.append(data)
 
