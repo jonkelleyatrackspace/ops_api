@@ -49,6 +49,8 @@ class age(BaseParameter):
   def evalulate_parameter(self,parameter_input):
     self.fail_if_null(self.name, parameter_input)
 
+validate_parameters(parameter)
+
 class test(Extension):
   def __init__(self):
     Extension.__init__(self)
