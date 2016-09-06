@@ -19,17 +19,24 @@
 # lock: False
 # -- end config --
 
-import datetime
 from constants import Constants as constants
 from param import ParameterCollection, BaseParameter, get_parameter, validate_parameters
 from param import Convert as convert
 from extension import EndSession, Extension
 
-# set useful instances
-dt = datetime.datetime.now() #<datetime> object
+import datetime
+
+
+# *************************
+# * Define Local Instance *
+# *************************
+dt = datetime.datetime.now()
 parameter = ParameterCollection()
 
 
+# *************************
+# * Define Request Params *
+# *************************
 @parameter.define
 class name(BaseParameter):
   __doc__ = "Input your first name"
@@ -49,8 +56,16 @@ class age(BaseParameter):
   def evalulate_parameter(self,parameter_input):
     self.fail_if_null(self.name, parameter_input)
 
+
+# *********************************
+# * Fail if params fail vaidation *
+# *********************************
 validate_parameters(parameter)
 
+
+# *********************************
+# * Define Request Business Logic *
+# *********************************
 class test(Extension):
   def __init__(self):
     Extension.__init__(self)
@@ -81,6 +96,11 @@ class test(Extension):
         datetime=dt))
     EndSession.close(0)
 
-me = test()
-test.run(me)
+
+# *************
+# * Run Logic *
+# *************
+if __name__ == "__main__":
+  me = test()
+  test.run(me)
 
