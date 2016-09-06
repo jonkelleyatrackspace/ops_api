@@ -19,6 +19,7 @@ import sys
 
 from constants import Constants
 
+
 """
 This is the Source Development Kit (SDK) for OpsAPI
 https://github.com/jonkelleyatrackspace/ops_api
@@ -28,7 +29,7 @@ CORE extensions available to opsapi. You can utilize this SDK in your own extens
 by accessing classes, functions and methods. Private methods/functions will start with
 an underscore, and should NOT be called (they may change between "official" versions.
 """
- 
+
 # This SDK is subject to change. If you modify a public function, classname or method
 # then look at what you should mark this change as below.
 # - New Classes/Methods           = Minor Release
@@ -40,6 +41,7 @@ an underscore, and should NOT be called (they may change between "official" vers
 # Extensions will be able to use > < macros in their definitions to take advantage
 # of known specifics. Format is SDK_VERSION = "M.m" (M=major,m=minor)
 SDK_VERSION = "2.0"
+
 
 def validate_parameters(cls_collection):
     """
@@ -121,6 +123,7 @@ def get_parameter(cls_collection,parameter=None,member='value'):
         # Return all parameters in map
         return param_map
 
+
 class ShellEnv():
     """
     This will fetch the environment variables from the parent environment.
@@ -138,6 +141,7 @@ class ShellEnv():
             shellvars[var] = val
         shellvars = dict((k.lower(), v) for k,v in shellvars.iteritems())
         return shellvars
+
 
 class ParameterCollection():
     """
@@ -165,6 +169,7 @@ class ParameterCollection():
                 del cls.__init__.func_globals[name]
         return cls
 
+
 class Convert():
     """
     This will convert parameter types to other types
@@ -190,6 +195,7 @@ class Convert():
         Converts a string to an integer
         """
         return int(value)
+
 
 class BaseParameter():
     """
@@ -269,6 +275,7 @@ def print_stderr(*args, **kwargs):
     """
     print(*args, file=sys.stderr, **kwargs)
 
+
 class BaseExtension():
     """
     This defines a single extension within the framework.
@@ -292,6 +299,7 @@ class BaseExtension():
 
     def stop(self):
         self._running = False
+
 
 class Session():
     """

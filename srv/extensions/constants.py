@@ -12,6 +12,7 @@
 
 from __future__ import absolute_import
 
+
 class Constants():
     """
     Define any local constants you wish to use. Add member variables or structs

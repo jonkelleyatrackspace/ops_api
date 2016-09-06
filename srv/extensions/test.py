@@ -31,7 +31,6 @@ from sdk import Convert as convert
 from sdk import (Session, BaseExtension)
 
 
-
 dt = datetime.datetime.now()
 parameter = ParameterCollection()
 
@@ -115,6 +114,7 @@ class test(BaseExtension):
       year=birthyear,
       datetime=dt))
     Session.close(0)
+
 
 
 # *****************
