@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Copyright 2016, Jonathan Kelley
+# file: test.py
 #
 # License: the mit license
 #    Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -12,7 +13,7 @@
 #    in all copies or substantial portions of the Software.
 
 # -- config --
-# description: This config block will go away soon since class properties encode this now.....
+# description: This config block will go away soon once tornado v2 sdk api refactor is merged, there are class properties below that describe parms.
 # param: name - Your name
 # param: age - Your age
 # http_method: post
