@@ -10,6 +10,8 @@ This is intended to empower systems engineers and developers looking to cut the 
 
 A real wizard could have multiple opsAPI deployments interconnected with Python-requests to create complex build pipelines and processes. Then they would use the beautiful [marmelab/ng-admin](https://github.com/marmelab/ng-admin) to create a browser app. Ditch Jenkins. Now where's the beach?
 
+Large organizations struggling to integrate their systems might have a good measure with this API. If you build loosely coupled REST interfaces between teams and products, you can really unleash productivity tools everyone can get access to, and anyone can write an integration point against.
+
 ## Quick dev environment
 
 You will need to `pip install paver` first, then just type `make`!
