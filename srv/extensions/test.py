@@ -19,88 +19,66 @@
 # lock: False
 # -- end config --
 
-from extension import Constants, Extension
-from extension import Parameter
-from extension import ParamHandle as Param
 import datetime
+from constants import Constants as constants
+from param import ParameterCollection, BaseParameter, get_parameter, validate_parameters
+from param import Convert as convert
+from extension import EndSession, Extension
 
-# Spawn Instances
-parent_params = Param()
-parent_param = parent_params.list() # Get dict of params
+# set useful instances
 dt = datetime.datetime.now() #<datetime> object
+parameter = ParameterCollection()
 
-def parameter(ok):
-  """ Dummy function for validation """
-  return ok
 
-registry = {}
-def register_parameter(cls):
-    name = cls.__name__
-    force_bound = False
-    if '__init__' in cls.__dict__:
-        cls.__init__.func_globals[name] = cls
-        force_bound = True
-    try:
-        registry[name] = cls()
-    finally:
-        if force_bound:
-            del cls.__init__.func_globals[name]
-    return cls
+@parameter.define
+class name(BaseParameter):
+  __doc__ = "Input your first name"
+  name = "name"
+  max_length = 128
+  censor_logs = False
+  def evalulate_parameter(self,parameter_input):
+    self.fail_if_null(self.name, parameter_input)
 
-@register_parameter
-class name(Parameter):
-    name = "name"
-    value = parent_param[name]
-    __doc__ = "Your name"
-    error_if_undefined = True
-    max_length = 128
-    censor_log = False
-
-@register_parameter
-class age(Parameter):
-    name = "age"
-    value = parent_param[name]
-    __doc__ = "Your age"
-    error_if_undefined = True
-    max_len = 3
-    max_int = 99
-    censor_log = False
+@parameter.define
+class age(BaseParameter):
+  __doc__ = "Input how old you are (in years)"
+  name = "age"
+  max_len = 3
+  max_int = 99
+  censor_logs = False
+  def evalulate_parameter(self,parameter_input):
+    self.fail_if_null(self.name, parameter_input)
 
 class test(Extension):
-    def __init__(self):
-        Extension.__init__(self)
+  def __init__(self):
+    Extension.__init__(self)
 
-    def run(self):
-        #Your code here...
-        print("IT works!")
-        birthyear =  dt.year - int(arguement['age'])
+  def run(self):
+    """
+    Define the code for this extension.
+    Parameters provided defined above are built by using
+       get_parameter(parameter)['age']['value']
 
-        # *************
-        # *  RESULTS  *
-        # *************
-        print(("{status} current_datetime={datetime}\n"
-          "{status} name={whom}\n"
-          "{status} age={age}\n"
-          "{status} status={u} was born in {year}").format(
-          status=Constants.API_RETURN_STRING,
-          age=arguement['age'],
-          whom=arguement['name'],
-          u=arguement['name'].title(),
-          year=birthyear,
-          datetime=dt))
+    """
+    birthyear =  dt.year - int(get_parameter(parameter)['age']['value'])
 
-def return_parameters():
-    """ Will return a dictionaries, key of the parameter
-    name and """
-    x = {}
-    for parameter,cls in registry.iteritems():
-      x[cls.name] = {}
-      cls.value = parent_param[cls.name] # Set the value from ENV
-      x[cls.name]['value'] = cls.value
-      x[cls.name]['censor_log'] = cls.censor_log
+    # *************
+    # *  RESULTS  *
+    # *************
+    print((
+        "{status} current_datetime={datetime}\n"
+        "{status} name={whom}\n"
+        "{status} age={age}\n"
+        "{status} status={u} was born in {year}"
+        ).format(
+        status=constants.API_RETURN_STRING,
+        age=get_parameter(parameter)['age']['value'],
+        whom=get_parameter(parameter)['name']['value'],
+        u=get_parameter(parameter)['name']['value'].title(),
+        year=birthyear,
+        datetime=dt))
+    EndSession.close(0)
 
-    return x
+me = test()
+test.run(me)
 
-print(return_parameters())
-
-exit(0)
