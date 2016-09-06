@@ -22,7 +22,7 @@
 from constants import Constants as constants
 from param import ParameterCollection, BaseParameter, get_parameter, validate_parameters
 from param import Convert as convert
-from extension import EndSession, Extension
+from extension import Session, Extension
 
 import datetime
 
@@ -94,7 +94,7 @@ class test(Extension):
         u=get_parameter(parameter)['name']['value'].title(),
         year=birthyear,
         datetime=dt))
-    EndSession.close(0)
+    Session.close(0)
 
 
 # *************

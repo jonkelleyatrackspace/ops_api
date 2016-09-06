@@ -41,7 +41,7 @@ class Extension():
     def stop(self):
         self._running = False
 
-class EndSession():
+class Session():
     """
     This is used for handling exiting the request framework in a handled manner.
     """
@@ -77,7 +77,7 @@ class EndSession():
         """
         Template for erroring when input is NULL
         """
-        EndSession.fail(name,199,['NULL_INPUT_ERROR'],"Unprocessable entity, undefined parameter")
+        Session.fail(name,199,['NULL_INPUT_ERROR'],"Unprocessable entity, undefined parameter")
 
 
 
