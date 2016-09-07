@@ -31,10 +31,13 @@ by accessing classes, functions and methods. Private methods/functions will star
 an underscore, and should NOT be called (they may change between "official" versions.
 """
 
+# Used for defining SDK version
 # format minorRelease.majorRelease
 # Major releases are changing, deleting methods/classes or breaking behavior.
 # Minor releases are just editing, bugfixing, refactor, or adding features.
-# Extensions can choose which version they want.
+# 
+# Extensions can choose which version they want, even with a greater or less than
+# symbol, so be careful with your planning here.
 __version__ = "2.0"
 
 def validate_parameters(cls_collection):
