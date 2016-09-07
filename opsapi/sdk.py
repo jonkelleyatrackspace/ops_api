@@ -31,7 +31,7 @@ by accessing classes, functions and methods. Private methods/functions will star
 an underscore, and should NOT be called (they may change between "official" versions.
 """
 
-# Used for defining SDK version
+# Use to define SDK version
 # format minorRelease.majorRelease
 # Major releases are changing, deleting methods/classes or breaking behavior.
 # Minor releases are just editing, bugfixing, refactor, or adding features.
