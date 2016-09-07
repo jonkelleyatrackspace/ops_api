@@ -35,7 +35,7 @@ an underscore, and should NOT be called (they may change between "official" vers
 # Major releases are changing, deleting methods/classes or breaking behavior.
 # Minor releases are just editing, bugfixing, refactor, or adding features.
 # Extensions can choose which version they want.
-SDK_VERSION = "2.0"
+__version__ = "2.0"
 
 def validate_parameters(cls_collection):
     """
