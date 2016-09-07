@@ -39,7 +39,7 @@ an underscore, and should NOT be called (they may change between "official" vers
 # 
 # Extensions can choose which version they want, even with a greater or less than
 # symbol, so be careful with your planning here.
-__version__ = StrictVersion("22.0.0")
+__version__ = StrictVersion("2.0.0")
 
 
 def validate_parameters(cls_collection):
