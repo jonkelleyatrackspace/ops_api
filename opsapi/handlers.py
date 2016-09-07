@@ -116,7 +116,7 @@ class BaseHandler(RequestHandler):
         if config['disable_debug_console'] == False:
             body_struct['debug'] = {
                 'err': message,
-                'out': [-1]
+                'out': None
             }
         body_struct['request'] = {
                 'status': status_code,
