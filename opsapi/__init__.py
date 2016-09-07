@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # file: __init__.py
+# desc: package
 # ---
 # © 2013, 2016, Jonathan Kelley <jon@uberleet.org> (github.com/jondkelley)
 # ©             Anthony Tarola (github.com/atarola)

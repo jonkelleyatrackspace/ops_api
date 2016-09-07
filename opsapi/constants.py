@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # file: constants.py
+# desc: constant literals for reference
 # ---
 # © 2016, Jonathan Kelley <jon@uberleet.org> (github.com/jondkelley)
 # Underwritten by The MIT License:

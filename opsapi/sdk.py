@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # file: sdk.py
+# desc: the source development kit
 # ---
 # © 2016, Jonathan Kelley <jon@uberleet.org> (github.com/jondkelley)
 # Underwritten by The MIT License:
