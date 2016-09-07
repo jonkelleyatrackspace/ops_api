@@ -15,6 +15,7 @@
 #    NOTE: Full terms in `LICENSE` by setuptools distribution or git.
 
 from __future__ import (print_function, absolute_import)
+from distutils.version import LooseVersion, StrictVersion
 from os import environ
 import inspect  # used by compile_parameters()
 import sys
@@ -38,7 +39,7 @@ an underscore, and should NOT be called (they may change between "official" vers
 # 
 # Extensions can choose which version they want, even with a greater or less than
 # symbol, so be careful with your planning here.
-__version__ = "2.0"
+__version__ = StrictVersion("22.0.0")
 
 
 def validate_parameters(cls_collection):
@@ -124,6 +125,10 @@ def get_parameter(cls_collection, parameter=None, member='value'):
         return param_map
 
 
+class PotentialSdkIncompatabilityWarning(UserWarning, ImportWarning):
+    pass
+
+
 class HttpMethod:
     """
     Set some common verbs from rfc2616
@@ -149,7 +154,6 @@ class Constants(BaseConstants):
     API_RETURN_STRING = "return_value"
     API_SUMMARY_STRING = "{v} result".format(v=API_RETURN_STRING)
     API_ERROR_STRING = "{v} troubleshoot".format(v=API_RETURN_STRING)
-
 
 
 class ShellEnv():
