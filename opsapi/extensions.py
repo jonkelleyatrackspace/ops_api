@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # file: extensions.py
+# desc: properties to describe the extension module architecture
 # ---
 # © 2013, 2016, Jonathan Kelley <jon@uberleet.org> (github.com/jondkelley)
 # ©             Anthony Tarola (github.com/atarola)
@@ -29,6 +30,11 @@ from tornado.ioloop import IOLoop
 import toro
 
 log = logging.getLogger(__name__)
+
+"""
+these contain the properties that describe extensions packs
+(the python modules) and their respective extensions (the scripts within)
+"""
 
 
 class SecurityFaultDangerousUserInput(Exception):
@@ -259,7 +265,6 @@ def create_collection(directory):
                 collection[name] = extension
 
     return collection
-
 
 def create_extension(extension_name, filename):
     """ parse a extension, returning a Extension object """
