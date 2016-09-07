@@ -1,16 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # file: options.py
-# authors: jonathan kelley, anthony tarola
 # ---
-# license: the mit license
-# Permission is hereby granted, free of charge, to any person obtaining a copy of
-# this software and associated documentation files (the "Software"), to deal in
-# the Software without restriction, including without limitation the rights to
-# use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-# the Software, and to permit persons to whom the Software is furnished to do so,
-# subject to the above copyright notice and this permission notice shall being included
-# in all copies or substantial portions of the Software.
+# © 2013, 2016, Jonathan Kelley <jon@uberleet.org> (github.com/jondkelley)
+# ©             Anthony Tarola (github.com/atarola)
+# Underwritten by The MIT License:
+#    Permission is hereby granted,  free of charge,  to any person obtaining
+#    a copy of this software and associated documentation files  (the "Soft-
+#    ware"), to deal in the Software without restriction,  including without
+#    limitation the rights to use,  copy, modify, merge, publish, distribute
+#    , sublicense, and/or sell copies of the Software, and to permit persons
+#    to whom the Software is furnished to do so,  subject to the above copy-
+#    right notice and this permission notice shall being included in all 
+#    copies or substantial portions of the Software.
+#    NOTE: Full terms in `LICENSE` by setuptools distribution or git.
 
 from optparse import OptionParser, IndentedHelpFormatter
 
