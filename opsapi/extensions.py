@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# vi: set ft=python :
 # file: extensions.py
 # authors: jonathan kelley, anthony tarola
 # ---
@@ -11,6 +12,7 @@
 # the Software, and to permit persons to whom the Software is furnished to do so,
 # subject to the above copyright notice and this permission notice shall being included
 # in all copies or substantial portions of the Software.
+
 
 import logging
 import os

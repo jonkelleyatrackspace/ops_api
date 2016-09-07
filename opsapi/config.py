@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# vi: set ft=python :
 # file: config.py
 # authors: jonathan kelley, anthony tarola
 # ---
@@ -22,6 +23,7 @@ log = logging.getLogger(__name__)
 default_mappings = {}
 default_mappings['disable_debug_console'] = False
 default_mappings['output_highlighter'] = False
+
 
 class Config(dict):
     """ Configuration dictionary """
