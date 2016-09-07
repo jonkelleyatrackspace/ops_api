@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # file: handlers.py
+# desc: routes and handler functions for these aforementioned routes
 # ---
 # © 2013, 2016, Jonathan Kelley <jon@uberleet.org> (github.com/jondkelley)
 # ©             Anthony Tarola (github.com/atarola)
@@ -34,6 +35,10 @@ from opsapi.util import route
 from opsapi.options import load_config_from_disk
 
 log = logging.getLogger(__name__)
+
+"""
+performs the route trigger functions and registers the routes for the application
+"""
 
 
 class BaseHandler(RequestHandler):
@@ -133,6 +138,7 @@ class BaseHandler(RequestHandler):
                 formatters.TerminalFormatter()
             )
         self.write(body_struct)
+
 
 @route(r"/extension_names/?")
 class ExtensionNamesCollectionHandler(BaseHandler):
