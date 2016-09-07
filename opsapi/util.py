@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # file: util.py
+# desc: misc utilities for opsapi tornadoapp
 # ---
 # © 2013, 2016, Jonathan Kelley <jon@uberleet.org> (github.com/jondkelley)
 # ©             Anthony Tarola (github.com/atarola)
@@ -19,7 +20,6 @@ import os
 import pkgutil
 import logging
 import sys
-
 import tornado.web
 
 from opsapi.config import config
@@ -27,6 +27,9 @@ from opsapi.extensions import create_collection
 
 log = logging.getLogger(__name__)
 
+"""
+misc utilities
+"""
 
 class route(object):
     """
@@ -56,7 +59,9 @@ class route(object):
 
 
 def setup_logging():
-    """ setup the logging system """
+    """
+    setup the logging system
+    """
 
     base_log = logging.getLogger()
     handler = logging.StreamHandler(sys.stdout)
@@ -66,8 +71,12 @@ def setup_logging():
     base_log.setLevel(logging.DEBUG)
     return handler
 
-
 def create_application(debug):
+    """
+    launch the application after building our routes dynamically
+    with our extensions collection
+    """
+
     # import the handler file, this will fill out the route.get_routes() call.
     import opsapi.handlers
 
