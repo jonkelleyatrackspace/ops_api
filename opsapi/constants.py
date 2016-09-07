@@ -21,6 +21,8 @@ Think HTTP codes, max open file descriptors, thats what I'd put in here.
 This can be leveraged in the SDK, and by extension in the constants namespace
 in any extension modules.
 """
+
+
 class BaseConstants:
     """
     Define any local constants you wish to use. Add member variables or structs
