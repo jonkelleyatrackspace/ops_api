@@ -9,6 +9,13 @@ from opsapi.sdk import PotentialSdkIncompatabilityWarning
 from distutils.version import LooseVersion, StrictVersion
 import warnings
 
+import test
+# How to expose this function
+# import opsapi_ext_core_demo
+# print(opsapi_ext_core_demo.test.parameter.collection)
+# {'age': <opsapi_ext_core_demo.test.age instance at 0x7f87011bd7a0>, 'name': <opsapi_ext_core_demo.test.name instance at 0x7f87011a80e0>}
+
+
 """
 This is a demo extension pack for opsAPI.
 Using the v2.0 SDK.

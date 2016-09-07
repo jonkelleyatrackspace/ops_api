@@ -24,17 +24,31 @@
 
 from __future__ import (print_function, absolute_import)
 import datetime
+import sys
 
-from opsapi.sdk import Constants as constants
+from opsapi.sdk import Constants as constant
 from opsapi.sdk import HttpMethod as method
 from opsapi.sdk import (ParameterCollection, BaseParameter,
                  get_parameter, validate_parameters)
 from opsapi.sdk import Convert as convert
 from opsapi.sdk import (Session, BaseExtension)
+from sys import argv as indiscovery
 
 
-dt = datetime.datetime.now()
+
+# ************************************
+# * Set if this is a real request or *
+#    or a  metadiscovery operation   *
+# ************************************
+if len(indiscovery) > 1:
+    indiscovery = True
+else:
+    indiscovery = False
+
+
 parameter = ParameterCollection()
+validate_parameters(parameter)
+
 
 
 # *************************
@@ -58,7 +72,6 @@ class name(BaseParameter):
             badlist=['-', '.'],
             value=user_input)
 
-
 @parameter.define
 class age(BaseParameter):
     __doc__ = "Input how old you are (in years)"
@@ -73,9 +86,6 @@ class age(BaseParameter):
             parameter=self.name,
             value=user_input)
 
-# Don't forget this! o.O
-import timeit
-validate_parameters(parameter)
 
 
 # *************************
@@ -109,7 +119,7 @@ class test(BaseExtension):
             "{status} age={age}\n"
             "{status} status={u} was born in {year}"
         ).format(
-            status=constants.API_RETURN_STRING,
+            status=constant.API_RETURN_STRING,
             age=get_parameter(parameter, 'age'),
             whom=get_parameter(parameter, 'name'),
             u=get_parameter(parameter, 'name').title(),
@@ -118,9 +128,18 @@ class test(BaseExtension):
         Session.close(0)
 
 
+
 # *****************
 # * Start Request *
 # *****************
-if __name__ == "__main__":
+if __name__ == "__main__" and indiscovery:
+    # Declare instances
+    
+    dt = datetime.datetime.now()
+
+    # NOTE: Do not delete validation NOTE:
+    validate_parameters(parameter)
+
+    # Declare self, run self
     me = test()
     test.run(me)
