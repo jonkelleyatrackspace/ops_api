@@ -16,18 +16,22 @@
 #    copies or substantial portions of the Software.
 #    NOTE: Full terms in `LICENSE` by setuptools distribution or git.
 
+import inspect
 import logging
 import os
 import os.path
 import pipes
 import re
 import subprocess
-
+from importlib import import_module
 from tornado import gen
 from tornado.process import Subprocess
 from tornado.ioloop import IOLoop
 import toro
 
+from opsapi.options import load_config_from_disk
+from opsapi.config import config
+from opsapi.sdk import HttpMethod
 log = logging.getLogger(__name__)
 
 """
@@ -238,159 +242,200 @@ class Extension(object):
         return "<{0} {1}>".format(self.__class__.__name__, self.metadata())
 
 
-def create_collection(directory):
+def create_collection():
     """ create the extension collection for the directory """
+    load_config_from_disk()
+    try:
+        num = len([x for x in config['extension_sets'].iteritems()])
+    except:
+        num = 0
+    if num > 0:
+        log.info("Attempting to load {0} extension packs...".format(num))
+    else:
+        log.exception("loading extension: there were 0 extension packs defined"
+            ", api services are now offline...")
+        #return
+    pack_collection = {}
+    collection = {}
+    for packName, packSettings in config['extension_sets'].iteritems():
+        options = packSettings['options'] # re-assign from nested dict key
+        # Other values maybe re-assigned here as needed in the future.
+#        try:
+        _modulePackObject = __import__(packName)
+        log.debug("Loaded extension module: `{0}`".format(packName))
+        pack_collection[packName] = _modulePackObject
+        # except ImportError:
+        #     log.error("ImportErrror loading extension pack:"
+        #         " `{0}` this module is currently not avaiab"
+        #         "le, skipping...".format(
+        #         packName))
 
-    log.info("Getting extension from directory {0}".format(directory))
+        for x, packModule in pack_collection.iteritems():
+            extensions = inspect.getmembers(packModule,inspect.ismodule)
 
-    collection = ExtensionCollection()
-
-    for (dirpath, _, filenames) in os.walk(directory):
-        for filename in filenames:
-            # grab the file's absolute path, and name
-            path = os.path.join(dirpath, filename)
-            full_path = os.path.abspath(path)
-
-            # format the name for sanity
-            name = path.replace(directory + os.sep, '')
-            name = '.'.join(name.split(".")[:-1])
-            name = re.sub(r'(\W)+', '_', name)
-
-            log.info("Adding extension with name: {0} and path: {1}".format(
-                name, full_path))
-            extension = create_extension(name, full_path)
-
-            if extension is not None:
-                collection[name] = extension
-
+            log.info("Extension `{0}` loaded,"
+                " found {1} extensions...".format(
+                    packName,len(extensions)))
+            for extensionName, extensionModule in extensions:
+                try:
+                    _ExtensionObject = __import__(extensionName)
+                    log.debug("Exension `{0}.{1}` select()".format(
+                        packName,extensionName))            
+                    collection[extensionName] = _ExtensionObject
+                except:
+                    log.info("ImportErrror loading extension:"
+                        " `{0}` this extension is currently n"
+                        "ot avaiable, skipping...".format(
+                        extensionName)) 
+                    # Create the extension inside the module
+                log.info("Exension `{0}.{1}` loaded".format(
+                        packName,extensionName))      
+                extensionPack = create_extension(
+                    extensionName, options, _ExtensionObject)
     return collection
 
-def create_extension(extension_name, filename):
-    """ parse a extension, returning a Extension object """
 
-    # script defaults
-    description = None
-    params = []
+
+def create_extension(extension_name, options, clsmodule):
+    """ parse a extension, returning an Extension object """
+    # __doc__: self-generating help for online api documentation
+    __doc__ = None
+    # uuid: please use a unique id or preferably a real uuid
+    uuid = "" 
+    # filtered_params: params to censor passwords in the logs for
     filtered_params = []
+    # tags: for online api documentation (and future use?)
     tags = []
-    http_method = 'post'
+    # http_method: request method this extension uses
+    http_method = HttpMethod.post
+    # output: if 'combined' stderr and stdout are joined
     output = 'split'
-    lock = False
-
+    # lock: if True, only one execution at a time can run
+    lock = False 
+    # noblock: if True a job will be detached and a pingback option given
+    noblock = False 
     # warn the user if we can't execute this file
-    if not os.access(filename, os.X_OK):
-        log.error("Filename {0} not executable, file ignored".format(filename))
-        return None
+    if extension_name == "warnings":
+        return
+    log.debug("Import `{0}`".format(extension_name))     
+    _Object = import_module(extension_name)
+    print(dir(_Object))
+    print(_Object.parameters)
+    #return Extension(filename, extension_name, description, params, filtered_params, tags, http_method, output, lock)
 
-    # grab file contents
-    with open(filename) as f:
-        contents = list(f)
+    # if not os.access(filename, os.X_OK):
+    #     log.error("Filename {0} not executable, file ignored".format(filename))
+    #     return None
 
-    in_block = False
+    # # grab file contents
+    # with open(filename) as f:
+    #     contents = list(f)
 
-    # loop over the contents of the file
-    for line in contents:
+    # in_block = False
 
-        # all lines should be bash style comments
-        if not line.startswith("#"):
-            continue
+    # # loop over the contents of the file
+    # for line in contents:
 
-        # we don't need the first comment, or extranious whitespace
-        line = line.replace("#", "").strip()
+    #     # all lines should be bash style comments
+    #     if not line.startswith("#"):
+    #         continue
 
-        # start of the extension block
-        if not in_block and line.startswith("-- config --"):
-            in_block = True
-            continue
+    #     # we don't need the first comment, or extranious whitespace
+    #     line = line.replace("#", "").strip()
 
-        # end of the extension block, so we'll stop here
-        if in_block and line.startswith("-- config --") \
-                or in_block and line.startswith("-- end config --"):
-            in_block = False
-            break
+    #     # start of the extension block
+    #     if not in_block and line.startswith("-- config --"):
+    #         in_block = True
+    #         continue
 
-        # make sure the line is good
-        if not ':' in line:
-            continue
+    #     # end of the extension block, so we'll stop here
+    #     if in_block and line.startswith("-- config --") \
+    #             or in_block and line.startswith("-- end config --"):
+    #         in_block = False
+    #         break
 
-        # prep work for later
-        key, value = [item.strip() for item in line.split(':')]
+    #     # make sure the line is good
+    #     if not ':' in line:
+    #         continue
 
-        # description
-        if in_block and key == "description":
-            description = value
-            continue
+    #     # prep work for later
+    #     key, value = [item.strip() for item in line.split(':')]
 
-        # http_method
-        if in_block and key == "http_method":
-            if value.lower() in ['get', 'post', 'put', 'delete']:
-                http_method = value.lower()
-                continue
-            else:
-                log.warn(
-                    "Unrecognized http_method type in -- config -- block: {0}".format(value.lower()))
-                continue
-            if value.lower() in ['split', 'combined']:
-                output = value.lower()
-                continue
-            else:
-                log.warn(
-                    "Unrecognized output type in -- config -- block: {0}".format(value.lower()))
-                continue
+    #     # description
+    #     if in_block and key == "description":
+    #         description = value
+    #         continue
 
-        # param
-        if in_block and key == "param":
-            # handle the optional description
-            if "-" in value:
-                name, desc = [item.strip() for item in value.split('-')]
-                params.append({'name': name, 'description': desc})
-                continue
+    #     # http_method
+    #     if in_block and key == "http_method":
+    #         if value.lower() in ['get', 'post', 'put', 'delete']:
+    #             http_method = value.lower()
+    #             continue
+    #         else:
+    #             log.warn(
+    #                 "Unrecognized http_method type in -- config -- block: {0}".format(value.lower()))
+    #             continue
+    #         if value.lower() in ['split', 'combined']:
+    #             output = value.lower()
+    #             continue
+    #         else:
+    #             log.warn(
+    #                 "Unrecognized output type in -- config -- block: {0}".format(value.lower()))
+    #             continue
 
-            params.append({'name': value})
-            continue
+    #     # param
+    #     if in_block and key == "param":
+    #         # handle the optional description
+    #         if "-" in value:
+    #             name, desc = [item.strip() for item in value.split('-')]
+    #             params.append({'name': name, 'description': desc})
+    #             continue
 
-        # filtered_params
-        if in_block and key == "filtered_params":
-            filter_values = [filter_value.strip()
-                             for filter_value in value.split(',')]
-            if len(filter_values) > 1:
-                for filter_value in filter_values:
-                    filtered_params.append(filter_value)
-                continue
+    #         params.append({'name': value})
+    #         continue
 
-            filtered_params.append(value)
-            continue
+    #     # filtered_params
+    #     if in_block and key == "filtered_params":
+    #         filter_values = [filter_value.strip()
+    #                          for filter_value in value.split(',')]
+    #         if len(filter_values) > 1:
+    #             for filter_value in filter_values:
+    #                 filtered_params.append(filter_value)
+    #             continue
 
-        # tags
-        if in_block and key == "tags":
-            tag_values = [tag_value.strip() for tag_value in value.split(',')]
-            if len(tag_values) > 1:
-                for tag_value in tag_values:
-                    tags.append(tag_value)
-                continue
+    #         filtered_params.append(value)
+    #         continue
 
-            tags.append(value)
-            continue
+    #     # tags
+    #     if in_block and key == "tags":
+    #         tag_values = [tag_value.strip() for tag_value in value.split(',')]
+    #         if len(tag_values) > 1:
+    #             for tag_value in tag_values:
+    #                 tags.append(tag_value)
+    #             continue
 
-        # lock
-        if in_block and key == "lock":
-            lock = (value == "True")
-            continue
+    #         tags.append(value)
+    #         continue
 
-        # ignore PEP 263 Source Code Encodings
-        if line.startswith("-*- coding:") or line.startswith("coding=") or line.startswith("vim: set fileencoding="):
-            continue
+    #     # lock
+    #     if in_block and key == "lock":
+    #         lock = (value == "True")
+    #         continue
 
-        # pass for license heading or config block comment lines
-        if line.lower().startswith("license:") or line.startswith("---"):
-            continue
+    #     # ignore PEP 263 Source Code Encodings
+    #     if line.startswith("-*- coding:") or line.startswith("coding=") or line.startswith("vim: set fileencoding="):
+    #         continue
 
-        log.warn("Unrecognized line in -- config -- block: {0}".format(line))
+    #     # pass for license heading or config block comment lines
+    #     if line.lower().startswith("license:") or line.startswith("---"):
+    #         continue
 
-    # if in_bock is true, then we never got an end to the block, which is bad
-    if in_block:
-        log.error(
-            "File with filename {0} missing a -- config -- end block, ignoring".format(filename))
-        return None
+    #     log.warn("Unrecognized line in -- config -- block: {0}".format(line))
 
-    return Extension(filename, extension_name, description, params, filtered_params, tags, http_method, output, lock)
+    # # if in_bock is true, then we never got an end to the block, which is bad
+    # if in_block:
+    #     log.error(
+    #         "File with filename {0} missing a -- config -- end block, ignoring".format(filename))
+    #     return None
+
+    #return Extension(filename, extension_name, description, params, filtered_params, tags, http_method, output, lock)

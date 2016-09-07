@@ -459,7 +459,7 @@ class ReloadHandler(BaseHandler):
 
     def post(self):
         """ reload the extensions from the extensions directory """
-        self.settings['extensions'] = create_collection(config['directory'])
+        self.settings['extensions'] = create_collection()
         """ reload the local configuration files """
         for k,v in default_mappings.iteritems():
             config[k] = v # reset defaults

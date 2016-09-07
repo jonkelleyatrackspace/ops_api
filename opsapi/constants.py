@@ -31,5 +31,4 @@ class BaseConstants:
     Define any local constants you wish to use. Add member variables or structs
     like namespace limits, bitmasks, commonly (ab)used constructs, or whatever.
     """
-    pass
 

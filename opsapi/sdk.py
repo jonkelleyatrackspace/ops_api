@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # file: sdk.py
-# desc: the source development kit
 # ---
 # © 2016, Jonathan Kelley <jon@uberleet.org> (github.com/jondkelley)
 # Underwritten by The MIT License:
@@ -85,6 +84,7 @@ def get_parameter(cls_collection, parameter=None, member='value'):
     <DICT>
     """
     param_map = {}
+    print(cls_collection)
     for cls_title, cls_obj in cls_collection.collection.iteritems():
         try:
             real_cls_title = cls_obj.name
@@ -189,7 +189,7 @@ class ParameterCollection():
     """
     collection = {}
 
-    def define(self, cls):
+    def define(self):
         """ This is used as a decorator """
         name = cls.__name__
         force_bound = False

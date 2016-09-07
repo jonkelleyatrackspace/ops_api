@@ -61,8 +61,8 @@ Use the apache htpasswd utility to create your htpasswd files."""
     parser.add_option('-d', '--debug', action="store_true", dest="debug", default=False,
                       help="Start the application with debug enabled.")
 
-    parser.add_option('--dir', action="store", dest="directory", default="/srv/extensions",
-                      help="Directory to load SDK extensions from")
+    # parser.add_option('--dir', action="store", dest="directory", default="/srv/extensions",
+    #                   help="Directory to load SDK extensions from")
 
     parser.add_option('--config', action="store", dest="config_file", default=None,
                       help="Provide a YAML file to load config options from. NOTE: Syntax is key: v; python objects allowed as values. Native YAML lists and hash syntax are unsupported.")
@@ -93,7 +93,7 @@ Use the apache htpasswd utility to create your htpasswd files."""
     else:
         config['passfile'] = None
 
-    config['directory'] = options.directory
+    ##config['directory'] = options.directory
     config['force_json'] = options.force_json
 
     for k, v in config_defaults.iteritems():

@@ -83,7 +83,7 @@ def create_application(debug):
 
     application = tornado.web.Application(
         route.get_routes(),
-        extensions=create_collection(config['directory']),
+        extensions=create_collection(),
         debug=debug
     )
 
