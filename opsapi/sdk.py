@@ -40,6 +40,7 @@ an underscore, and should NOT be called (they may change between "official" vers
 # symbol, so be careful with your planning here.
 __version__ = "2.0"
 
+
 def validate_parameters(cls_collection):
     """
     this will scope through the registered Parameter class children
@@ -59,7 +60,6 @@ def validate_parameters(cls_collection):
                 # We found the reference to its own class object
                 # run the evaluate function on it.
                 value.input_validation(clsmembers['value'])
-
 
 def get_parameter(cls_collection, parameter=None, member='value'):
     """
@@ -123,6 +123,7 @@ def get_parameter(cls_collection, parameter=None, member='value'):
         # Return all parameters in map
         return param_map
 
+
 class HttpMethod:
     """
     Set some common verbs from rfc2616
@@ -136,6 +137,7 @@ class HttpMethod:
     delete = "DELETE"
     trace = "TRACE"
     connect = "CONNECT"
+
 
 class Constants(BaseConstants):
     """ 

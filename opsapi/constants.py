@@ -14,6 +14,8 @@
 #    copies or substantial portions of the Software.
 #    NOTE: Full terms in `LICENSE` by setuptools distribution or git.
 
+from __future__ import (print_function, absolute_import)
+
 """
 This file defines constant structures for which you can reference or inherit from.
 Think HTTP codes, max open file descriptors, thats what I'd put in here.
