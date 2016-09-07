@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# vi: set ft=python :
 # Copyright 2016, Jonathan Kelley
 # file: constants.py
 #
@@ -39,6 +40,7 @@ class Constants():
     # Busted user selectable socket limits can go this high
     # We don't need to get sockets too high.
     POSTGRES_MAXIMUM_CONNECTION_LIMIT = 150
+
 
 class HttpMethod():
     """
