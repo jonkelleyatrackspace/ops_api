@@ -16,7 +16,6 @@
 #    copies or substantial portions of the Software.
 #    NOTE: Full terms in `LICENSE` by setuptools distribution or git.
 
-
 import logging
 import os
 import os.path
