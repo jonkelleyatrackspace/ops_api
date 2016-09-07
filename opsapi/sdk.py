@@ -19,7 +19,7 @@ from os import environ
 import inspect  # used by compile_parameters()
 import sys
 
-from .constants import Constants
+from .constants import BaseConstants
 
 """
 This is the Source Development Kit (SDK) for OpsAPI
@@ -114,6 +114,32 @@ def get_parameter(cls_collection, parameter=None, member='value'):
     else:
         # Return all parameters in map
         return param_map
+
+class HttpMethod:
+    """
+    Set some common verbs from rfc2616
+    Not sure if theyres a better way to handle this.
+    """
+    options = "OPTIONS"
+    get = "GET"
+    head = "HEAD"
+    post = "POST"
+    put = "PUT"
+    delete = "DELETE"
+    trace = "TRACE"
+    connect = "CONNECT"
+
+class Constants(BaseConstants):
+    """ 
+    These are constants that are referenced within the SDK file here.
+    Also add constants you would like to shell out to any extensions,
+    as they will inherit from this as well.
+    """
+    # These are the api status output keys
+    API_RETURN_STRING = "return_value"
+    API_SUMMARY_STRING = "{v} result".format(v=API_RETURN_STRING)
+    API_ERROR_STRING = "{v} troubleshoot".format(v=API_RETURN_STRING)
+
 
 
 class ShellEnv():

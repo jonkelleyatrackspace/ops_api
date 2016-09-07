@@ -25,12 +25,12 @@
 from __future__ import (print_function, absolute_import)
 import datetime
 
-from constants import Constants as constants
-from constants import HttpMethod as method
-from sdk import (ParameterCollection, BaseParameter,
+from opsapi.sdk import Constants as constants
+from opsapi.sdk import HttpMethod as method
+from opsapi.sdk import (ParameterCollection, BaseParameter,
                  get_parameter, validate_parameters)
-from sdk import Convert as convert
-from sdk import (Session, BaseExtension)
+from opsapi.sdk import Convert as convert
+from opsapi.sdk import (Session, BaseExtension)
 
 
 dt = datetime.datetime.now()

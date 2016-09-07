@@ -14,43 +14,17 @@
 #    copies or substantial portions of the Software.
 #    NOTE: Full terms in `LICENSE` by setuptools distribution or git.
 
-class Constants():
+"""
+This file defines constant structures for which you can reference or inherit from.
+Think HTTP codes, max open file descriptors, thats what I'd put in here.
+
+This can be leveraged in the SDK, and by extension in the constants namespace
+in any extension modules.
+"""
+class BaseConstants:
     """
     Define any local constants you wish to use. Add member variables or structs
     like namespace limits, bitmasks, commonly (ab)used constructs, or whatever.
     """
-    LINUX_MAX_FILE_NAME_LENGTH = 255
-    LINUX_MAX_FILE_PATH_LENGTH = 4096
+    pass
 
-    # These are the api status output keys
-    API_RETURN_STRING = "return_value"
-    API_SUMMARY_STRING = "{v} result".format(v=API_RETURN_STRING)
-    API_ERROR_STRING = "{v} troubleshoot".format(v=API_RETURN_STRING)
-
-    # Postgres uses  no more than  NAMEDATALEN-1 bytes
-    # of an  identifier;  longer names can be written in
-    # commands, but they will be truncated.  By default,
-    # NAMEDATALEN is 64 so the maximum identifier length
-    # is 63 bytes.
-    POSTGRES_NAMEDATA_LEN = 64
-
-    # User selectable socket limits can go this high
-    POSTGRES_CONNECTION_LIMIT = 25
-
-    # Busted user selectable socket limits can go this high
-    # We don't need to get sockets too high.
-    POSTGRES_MAXIMUM_CONNECTION_LIMIT = 150
-
-
-class HttpMethod():
-    """
-    defines common http methods from rfc2616
-    """
-    options = "OPTIONS"
-    get = "GET"
-    head = "HEAD"
-    post = "POST"
-    put = "PUT"
-    delete = "DELETE"
-    trace = "TRACE"
-    connect = "CONNECT"
