@@ -158,3 +158,15 @@ def install_extensions():
                 options={
                     'extension' : directory
                 })
+
+@task
+def clean(options):
+    """
+    CLEAN after paver build operations
+    """
+    for i in ['./dist', './build', './opsapi.egg-info']:
+        print("Removing {file}".format(file=i))
+        try:
+            shutil.rmtree(i)
+        except OSError:
+            pass
