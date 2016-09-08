@@ -32,8 +32,6 @@ make extension(name) should build a particular extension
 (make this distributable in cwd as extension too for git)
 """
 
-SPEC_FILE = "opsapi.spec"
-
 def value_from_specfile(getkey):
     """
     loads the version and other keys from the .spec file
@@ -42,6 +40,11 @@ def value_from_specfile(getkey):
     i looked into using rpm, but the library is really really unwieldy
     not an external api, and looks like it's likely to change
     """
+    cwd = os.getcwd()
+    for file in os.listdir(cwd):
+        if file.endswith(".spec"):
+            SPEC_FILE = file
+
     spec = {}
     with open(SPEC_FILE, "r") as f:
         for line in f.readlines():

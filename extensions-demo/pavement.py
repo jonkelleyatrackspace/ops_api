@@ -10,8 +10,6 @@ import shutil
 import os
 import platform
 
-SPEC_FILE = "opsapi_ext_core_demo.spec"
-
 def value_from_specfile(getkey):
     """
     loads the version and other keys from the .spec file
@@ -20,6 +18,11 @@ def value_from_specfile(getkey):
     i looked into using rpm, but the library is really really unwieldy
     not an external api, and looks like it's likely to change
     """
+    cwd = os.getcwd()
+    for file in os.listdir(cwd):
+        if file.endswith(".spec"):
+            SPEC_FILE = file
+
     spec = {}
     with open(SPEC_FILE, "r") as f:
         for line in f.readlines():
