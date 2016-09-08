@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # file: pavement.py
+# desc: Setuputils and Paver configure/install components
 # authors: jonathan kelley 2016
 
 from paver.easy import *
@@ -9,6 +10,29 @@ from paver.setuputils import setup
 import shutil
 import os
 import platform
+from paver.easy import pushd
+
+
+
+"""
+Setuputils / Paver setup
+Paver performs our setuputils tasks, in addition to configure
+tasks without utilizing the full extent of Makefile.
+This basically feeds off Makefile and calls the appropriate
+setup function. Handy eh?
+
+Just be sure to keep your Paver <> Makefile alias/pointer
+references up to date! :)
+
+TODO: NOTE:
+`make` in Makefile should call paver task to install
+extensions, and then opsAPI. Extensions are headless.
+TODO: NOTE:
+make extension(name) should build a particular extension
+(make this distributable in cwd as extension too for git)
+"""
+
+SPEC_FILE = "opsapi.spec"
 
 def value_from_specfile(getkey):
     """
@@ -19,18 +43,26 @@ def value_from_specfile(getkey):
     not an external api, and looks like it's likely to change
     """
     spec = {}
-    with open("opsapi.spec", "r") as f:
+    with open(SPEC_FILE, "r") as f:
         for line in f.readlines():
             try:
                 value = line.split(":")[1].lstrip().strip()
                 key = line.split(":")[0].lstrip().lower().rstrip()
-                print("X"+str(key))
+
                 spec[key] = value
             except:
                 pass
         return spec[getkey]
 
-__doc__ = """ Setuptools with paver """
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 install_requires = [
     'pyyaml==3.10',
@@ -38,6 +70,7 @@ install_requires = [
     'toro==0.5',
     'passlib==1.6'
 ]
+install_requires = []
 setup(
     name=value_from_specfile('name'),
     version=value_from_specfile('version'),
@@ -57,128 +90,71 @@ setup(
         "Development Status :: 4 - Beta",
         "Intended Audience :: System Administrators",
         "Intended Audience :: Developers",
-        "Intended Audience :: Customer Service",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
         "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 2 :: Only",
         "Topic :: Utilities",
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
         "Topic :: Internet :: WWW/HTTP :: Site Management",
         "Topic :: System :: Operating System",
-        "Topic :: System :: System Shells"
     ],
     zip_safe=False
 )
 
-
-def chmod_dash_r(path, mode):
-    """
-    Just a little non registered function to chmod a path with file mode.
-    """
-    for root, dirs, files in os.walk(path, topdown=False):
-        for dir in [os.path.join(root, d) for d in dirs]:
-            os.chmod(dir, mode)
-    for file in [os.path.join(root, f) for f in files]:
-        os.chmod(file, mode)
-
-def sudo_warning():
-    """
-    A little non registered function to remind a user they might need to
-    employ the use of sudo/su to properly run this paver command.
-    """
-    if os.getuid() > 0:
-        print("-"*60)
-        print("   WARNING: This unprivleged UID may need to use sudo/su.")
-        print("-"*60)
-
-@task
+@needs('install_extensions')
 @needs('install')
-def load_extensions(options):
+def make_all():
     """
-    LOAD the extensions
+    This is just a dummy task that
+    installs opsapi+exensions with a
+    require decorator.
     """
-    sudo_warning()
-    if os.path.isdir("/srv/extensions"):
-        print("Deleting /srv/extensions")
-        shutil.rmtree("/srv/extensions")
-    print("Installing extensions to /srv/extensions")
-    shutil.copytree("./srv/extensions", ("/srv/extensions"))
-    chmod_dash_r("/srv/extensions", 0755)
+    pass
 
 @task
-@needs('load_extensions')
-def setup():
+@cmdopts([
+    ('extension=', 'e', 'Directory of extension to install')
+])
+def install_extension():
     """
-    SETUP the application by loading the python package, extensions, 
-    and pip requirements.
+    When given the -e parameter it will install an extension
+    in a subdirectory with `paver install`
     """
-    sudo_warning()
-    for dependecy in install_requires:
-        sh('pip install {package}'.format(package=dependecy))
+    if not hasattr(options, "extension"):
+        print("{0}Missing options, use -e or --help{1}".format(
+            bcolors.FAIL,
+            bcolors.ENDC))
+        exit(1)
+    else:
+        arg = options.extension
+        print("{x}Run install task for "
+        " {extension}{y}".format(
+            extension=arg,
+            x=bcolors.OKGREEN,
+            y=bcolors.ENDC))
+    with pushd(arg):
+        sh("paver install".format(
+            dir=arg))
 
 @task
-@needs('load_extensions')
-def start():
+@might_call('install_extension')
+def install_extensions():
     """
-    START a local dev instance for testing
+    This will iterate through your CWD and go into
+    any dir matching extensions-*. If a pavement.py
+    is inside this directory, run paver install.
     """
-    sudo_warning()
-    uname = platform.uname()[0]
-    if uname == 'Linux':
-        print("Killing opsapi...")
-        sh('pkill opsapi')
-    sh('opsapi --dir=/srv/extensions')
-
-
-@task
-def prep_rpmbuild():
-    print("TODO")
-
-@task
-def make_rpm():
-    """
-    Builds RPM from the local .spec file.
-    """
-    print("TODO")
-
-@task
-def install_rpms():
-    print("TODO")
-
-@task
-def reinstall():
-    print("TODO")
-
-@task
-def uninstall():
-    print("TODO")
-
-@task
-def uninstall_rpms():
-    print("TODO")
-
-@task
-def prep_debbuild():
-    print("TODO")
-
-@task
-def make_deb():
-    print("TODO")
-
-@task
-def uninstall_debs():
-    print("TODO")
-
-@task
-def clean(options):
-    """
-    CLEAN after paver build operations
-    """
-    for i in ['./dist', './build', './opsapi.egg-info']:
-        print("Removing {file}".format(file=i))
-        try:
-            shutil.rmtree(i)
-        except OSError:
-            pass
+    cwd = str(os.getcwd())
+    cwd_dirs = [ name for name in
+     os.listdir(cwd) if 
+     os.path.isdir(os.path.join(cwd, name))
+     ] # comprehend a list of dirnames in cwd
+    will_install = []
+    for directory in cwd_dirs:
+        paver = "{x}/pavement.py".format(x=directory)
+        if directory.startswith('extensions-') and os.path.isfile(paver):
+            call_task('install_extension',
+                options={
+                    'extension' : directory
+                })
