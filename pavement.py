@@ -104,7 +104,7 @@ setup(
 
 @needs('install_extensions')
 @needs('install')
-def make_all():
+def install_all():
     """
     This is just a dummy task that
     installs opsapi+exensions with a
